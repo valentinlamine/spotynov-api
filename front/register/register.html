@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../assets/register.css"/>
+  <title>Document</title>
+</head>
+<body>
+  <!-- Conteneur avec image de fond et effet de flou -->
+  <div class="container">
+
+  <!-- Formulaire avec effet de transparence et flou -->
+  <div class="form-container">
+
+    <!-- Conteneur centré avec largeur max de 460px -->
+    <div class="form-content">
+
+      <!-- Texte "Inscription" plus gros -->
+      <p class="title">
+        Inscription
+      </p>
+
+      <!-- Texte plus petit pour la description -->
+      <p class="subtitle">
+        Ecoutez de la musique en ligne avec vos amis en toute simplicité.
+      </p>
+
+      <!-- Formulaire d'inscription -->
+      <form method="post" class="form">
+
+        <!-- Ligne de séparation avec le texte "ou" au milieu -->
+        <div class="separator">
+          <div class="separator-line"></div>
+        </div>
+
+        <div>
+          <label for="email" class="label">E-mail</label>
+          <input type="email" id="email" placeholder="exemple@spotynov.com" class="input" />
+        </div>
+
+        <div>
+          <label for="pseudo" class="label">Pseudo</label>
+          <input type="text" id="pseudo" placeholder="Votre pseudo" class="input" />
+        </div>
+
+        <div class="input-container">
+          <label for="password" class="label">Mot de passe</label>
+          <input id="password" placeholder="Votre mot de passe" class="input">
+
+          <!-- Bouton pour afficher/masquer le mot de passe -->
+          <span class="toggle-password"></span>
+        </div>
+
+        <div class="input-container">
+          <label for="confirmPassword" class="label">Confirmez le mot de passe</label>
+          <input id="confirmPassword" placeholder="Confirmez votre mot de passe"
+                 name="confirmPassword"
+                 class="input">
+
+          <!-- Bouton pour afficher/masquer la confirmation du mot de passe -->
+          <span class="toggle-password"></span>
+        </div>
+
+        <!-- Bouton s'inscrire -->
+        <button class="signup-btn">S'inscrire</button>
+        <div class="login-link-container">
+          <a href="/login" class="login-link">Vous avez déjà un compte ?</a>
+        </div>
+      </form>
+    </div>
+  </div>
+  </div>
+</body>
+</html>

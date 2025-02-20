@@ -1,0 +1,188 @@
+* {
+  margin: 0;
+  padding: 0;
+
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.transition-width {
+  transition: width 0.3s ease; /* Adjust the duration and easing as needed */
+}
+
+.hidden {
+  display: none; /* Keep this for controlling visibility */
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Conteneur avec image de fond et effet de flou */
+.container {
+  background-image: url("background/Rectangle-5.png");
+  position: relative;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Formulaire avec effet de transparence et flou */
+.form-container {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  margin-top: 2.5rem;
+  padding: 2rem;
+  background-color: rgba(9, 21, 30, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.5s;
+}
+
+/* Conteneur centré avec largeur max de 460px */
+.form-content {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+/* Texte "Inscription" plus gros */
+.title {
+  text-align: center;
+  color: white;
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+/* Texte plus petit pour la description */
+.subtitle {
+  text-align: center;
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+/* Formulaire d'inscription */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.google-btn:hover {
+  background-color: #202c34;
+  transform: scale(1.05);
+}
+
+/* Ligne de séparation avec le texte "ou" au milieu */
+.separator {
+  display: flex;
+  align-items: center;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.separator-line {
+  flex-grow: 1;
+  border-top: 2px solid #3f4d54;
+}
+
+label {
+    display: block;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #202c34;
+  border: 1px solid #3f4d54;
+  border-radius: 0.375rem;
+  color: #ecfefe;
+  font-weight: 300;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #f06292;
+  box-shadow: 0 0 0 2px #f06292;
+}
+
+/* Bouton pour afficher/masquer le mot de passe */
+.toggle-password {
+  position: absolute;
+  top: 2.5rem;
+  right: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/* Bouton s'inscrire */
+.signup-btn {
+  width: 100%;
+  background-color: #1ed7be;
+  color: #09151e;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 1rem 1.25rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.signup-btn:hover {
+  background: linear-gradient(to right, #1ed7be, #f06292);
+  transform: scale(1.05);
+}
+
+.signup-btn:focus {
+  outline: none;
+  ring: 2px solid #f06292;
+  ring-offset: 2px;
+}
+
+/* Lien vers la page de connexion */
+.login-link-container {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.login-link {
+  color: white;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  color: #f06292;
+  transition: color 0.3s;
+}

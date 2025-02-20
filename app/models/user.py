@@ -1,8 +1,20 @@
 # app/models/user.py
+from datetime import datetime
+
 from pydantic import BaseModel
 
 
-class User(BaseModel):
+class SimplifiedUser(BaseModel):
     username: str
     password: str
-    spotify_linked: bool = False
+
+
+class User(BaseModel):
+    id: int
+    username: str
+    password: str
+    token: str = None
+    tokenExpiration: datetime = None
+    groupName: str = None
+    spotifyToken: str = None
+    spotifyTokenExpiration: datetime = None

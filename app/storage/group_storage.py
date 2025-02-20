@@ -1,11 +1,10 @@
 import json
-from app.models.user import User
 from app.models.group import Group
 
 
-class JSONStorage:
+class GroupStorage:
 
-    def __init__(self, filepath="users.json"):
+    def __init__(self, filepath="../json/groups.json"):
         self.filepath = filepath
         self.data = self.load_data()
 
@@ -14,19 +13,22 @@ class JSONStorage:
             with open(self.filepath, "r") as file:
                 return json.load(file)
         except FileNotFoundError:
-            return {"users": [], "groups": []}
+            return []
 
     def save_data(self):
         with open(self.filepath, "w") as file:
             json.dump(self.data, file, indent=4)
 
-    def save_user(self, user: User):
-        self.data["users"].append(user.dict())
+    def save_group(self, group: Group):
+        self.data["group"].append(group.dict())
         self.save_data()
         return True
 
-    def get_user_by_username(self, username: str):
-        for user in self.data["users"]:
-            if user["username"] == username:
-                return User(**user)
+    def get_group_by_name(self, name: str):
+        for group in self.data["group"]:
+            if group["name"] == name:
+                return group
         return None
+
+
+
