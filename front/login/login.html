@@ -1,11 +1,48 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="../assets/login.css">
 </head>
 <body>
-    <p>alède</p>
+
+<div class="container">
+    <div id="div_form" class="form-container">
+        <div class="form-content">
+            <h2 id="form-title">Connexion</h2>
+            <p class="subtitle">Discutez avec vos amis, créez des groupes et plus encore !</p>
+
+            <div class="separator">
+                <div class="line"></div>
+            </div>
+
+            <form id="login-form" method="post">
+                <div class="input-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" placeholder="exemple@spotynov.com">
+                </div>
+
+                <div class="input-group password-group">
+                    <label for="password">Mot de passe</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="Votre mot de passe">
+                        <span class="eye-icon" onclick="togglePasswordVisibility()"></span>
+                    </div>
+                </div>
+
+                <button id="login-btn" onclick="signIn()">Se connecter</button>
+
+                <div class="user-options">
+                    <a href="../auth/forgotPassword" id="forgot-password-link">Mot de passe oublié ?</a>
+                    <div class="line-separator"></div>
+                    <span>Vous n'avez pas de compte ? <a href="/register">S'inscrire</a></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
