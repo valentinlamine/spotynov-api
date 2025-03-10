@@ -1,29 +1,9 @@
 {
     "users": [
         {
-            "id": 2,
+            "id": 6,
             "username": "valouz",
-            "password": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
-            "token": null,
-            "tokenExpiration": null,
-            "groupId": -1,
-            "spotifyToken": null,
-            "spotifyTokenExpiration": null
-        },
-        {
-            "id": 3,
-            "username": "valouz2",
-            "password": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
-            "token": null,
-            "tokenExpiration": null,
-            "groupId": -1,
-            "spotifyToken": null,
-            "spotifyTokenExpiration": null
-        },
-        {
-            "id": 4,
-            "username": "valouz3",
-            "password": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+            "password": "$2b$12$ehSqBf0kp/DbtAz8OS.zr.z/xCCsoH7XUcS/3ScKx6pyFTmUUNTHG",
             "token": null,
             "tokenExpiration": null,
             "groupName": null,
@@ -31,5 +11,5 @@
             "spotifyTokenExpiration": null
         }
     ],
-    "lastUserId": 4
+    "lastUserId": 6
 }
