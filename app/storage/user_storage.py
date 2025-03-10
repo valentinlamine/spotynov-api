@@ -63,10 +63,10 @@ class UserStorage:
             return True
         return False
 
-    def update_user(self, user: User):
-        for i, u in enumerate(self.data["users"]):
-            if u["id"] == user.id:
-                self.data["users"][i] = user.dict()
+    def set_spotify_token(self, username: str, spotify_token: str):
+        for user in self.data["users"]:
+            if user["username"] == username:
+                user["spotifyToken"] = spotify_token
                 self.save_data()
                 return True
         return False

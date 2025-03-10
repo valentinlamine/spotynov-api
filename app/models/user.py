@@ -13,12 +13,5 @@ class User(BaseModel):
     id: int
     username: str
     password: str
-    token: str = None
-    tokenExpiration: datetime = None
     groupName: str = None
     spotifyToken: str = None
-    spotifyTokenExpiration: datetime = None
-    spotifyId: str = None
-    spotifyDisplayName: str = None
-    spotifyUrl: str = None
-    spotifyImageUrl: str = None

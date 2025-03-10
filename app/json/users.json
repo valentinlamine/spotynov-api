@@ -4,16 +4,23 @@
             "id": 2,
             "username": "valouz",
             "password": "$2b$12$6wfCkjBZOWCgOl2p2GfwfOsPFacNd9rpzD2vA8MMc7w6O/WPFztMG",
-            "token": null,
-            "tokenExpiration": null,
             "groupName": null,
-            "spotifyToken": null,
-            "spotifyTokenExpiration": null,
-            "spotifyId": null,
-            "spotifyDisplayName": null,
-            "spotifyUrl": null,
-            "spotifyImageUrl": null
+            "spotifyToken": null
+        },
+        {
+            "id": 3,
+            "username": "valouz2",
+            "password": "$2b$12$4ug9Ix4Bs.vLCpjx9WIQd.kW585QPjN0S.jChmgn5AfNi031Gv8CO",
+            "groupName": null,
+            "spotifyToken": "BQCN-cmBJwC72-E2jd8WCQQhPaYYvIHog0zEojfi65hdVhioUMP20AC_kB7fFQUvJK_Ko7ocm9TrbOqpXpcYvcaYqZb6N9-oBgseGPaCTTJj0x-0z9r4Jc3ebBn2fZpNHTkzBoVZX6Q52vikPTlb6CmuGWqydqK7ZlV1WzD8hjTcptzOeIsykmslJnRd9_eUWIl5VEUIcgUUQZHDYX4jty92cDSCuhfQPY2Pg_BBN8B9S8PNn9Ta97cUdnAJvcvVW9ulqtn_WVUhbqoCNr4QS18W3fI48Gusot5126FQG1l-u_PbdPhaGDQHFOgDTw41jP27H7mF_w4mUTU43z2kaiWbXwxRxLs"
+        },
+        {
+            "id": 4,
+            "username": "test",
+            "password": "$2b$12$ePPBiPi.fHaFTk1iDnFdZOmDA2JaK8I8MQJ4o.8pvNqoe7wE.cEJq",
+            "groupName": null,
+            "spotifyToken": null
         }
     ],
-    "lastUserId": 2
+    "lastUserId": 4
 }

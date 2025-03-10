@@ -79,7 +79,7 @@ class AuthService:
             return None, "Token expiré"
 
     @staticmethod
-    def link_spotify_account(username: str, spotify_user_info: dict):
+    def set_spotify_token(username: str, spotify_token: str):
         # Récupérer l'utilisateur dans la base de données à partir de son nom d'utilisateur
         storage = UserStorage()
         user = storage.get_user_by_name(username)
@@ -87,17 +87,28 @@ class AuthService:
         if not user:
             return False, "Utilisateur non trouvé"
 
-        # Lier les informations Spotify à l'utilisateur
-        user.spotifyId = spotify_user_info["id"]
-        user.spotifyDisplayName = spotify_user_info.get("display_name", "")
-        user.spotifyUrl = spotify_user_info.get("external_urls", {}).get("spotify", "")
-        user.spotifyImageUrl = spotify_user_info.get("images", [{}])[0].get("url", "")
+        # Vérifier que le token Spotify est une chaîne valide
+        if not isinstance(spotify_token, str) or not spotify_token:
+            return False, "Le token Spotify est invalide"
 
         # Mettre à jour l'utilisateur dans le stockage
-        success = storage.update_user(user)
+        success = storage.set_spotify_token(username, spotify_token)
 
         # Si la mise à jour échoue, retourner une erreur
         if not success:
             return False, "Erreur lors de la mise à jour des informations de l'utilisateur"
 
         return True, "Compte Spotify lié avec succès"
+
+    @classmethod
+    def get_spotify_token(cls, username):
+        storage = UserStorage()
+        user = storage.get_user_by_name(username)
+
+        if not user:
+            return None
+
+        if "spotifyToken" not in user:
+            return None
+
+        return user["spotifyToken"]

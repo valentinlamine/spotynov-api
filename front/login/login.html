@@ -35,7 +35,6 @@
                 <button id="login-btn" onclick="signIn()">Se connecter</button>
 
                 <div class="user-options">
-                    <a href="../auth/forgotPassword" id="forgot-password-link">Mot de passe oublié ?</a>
                     <div class="line-separator"></div>
                     <span>Vous n'avez pas de compte ? <a href="/register">S'inscrire</a></span>
                 </div>
@@ -43,6 +42,54 @@
         </div>
     </div>
 </div>
+<script>
+    // Fonction pour envoyer la demande de connexion
+    async function signIn(event) {
+    event.preventDefault(); // Empêche la soumission traditionnelle du formulaire
 
+    // Récupérer les informations de connexion
+    const pseudo = document.getElementById('pseudo').value;
+    const password = document.getElementById('password').value;
+
+    // Créer l'objet de données à envoyer
+    const data = {
+        username: pseudo,
+        password: password
+    };
+
+    // Appel à l'API pour l'authentification
+    try {
+        const response = await fetch('http://localhost:8000/api/auth/login', { // Assurez-vous que l'URL correspond
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error('Identifiants incorrects');
+        }
+
+        const result = await response.json();
+
+        // Sauvegarder le token dans le localStorage
+        localStorage.setItem('token', result.token);
+
+        // Rediriger vers une autre page après la connexion réussie
+        window.location.href = '/dashboard'; // Exemple de redirection
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+
+    // Fonction pour afficher/masquer le mot de passe
+    function togglePasswordVisibility() {
+        const passwordField = document.getElementById('password');
+        const type = passwordField.type === 'password' ? 'text' : 'password';
+        passwordField.type = type;
+    }
+</script>
 </body>
 </html>
