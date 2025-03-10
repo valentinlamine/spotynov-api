@@ -1,9 +1,204 @@
-body {
+* {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: url('background/rectangle.png') center/cover;
+    padding: 0;
+    box-sizing: border-box;
+}
+body, html {
+    height: 100%;
+    background-image: url('background/rectangle-3.png');
+    overflow: hidden;
+    font-family: Inter, sans-serif;
+}
+.container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+}
+header {
+    background: rgba(9, 21, 30, 0.8);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+.content {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
     align-items: center;
-    min-height: 100vh;
+}
+.column-middle {
+    flex: 1;
+    padding: 1rem;
+    background: rgba(9, 21, 30, 0.8);
+    margin: 0 0.5rem;
+    max-width: 60%;
+    border-radius: 50%;
+    border-radius: 30px;
+    height: 95%;
+    max-height: 95%;
+    overflow-y: auto;
+    flex-direction: column;
+
+}
+
+.middle-section {
+    width: 100%;
+}
+
+.top-section {
+    height: 25%;
+    display: flex;
+}
+
+.image {
+    width: 25%;
+    height: 100%;
+    background: black;
+    border-radius: 30px;
+}
+
+.information {
+    height: 100%;
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.title {
+    padding-left: 30px;
+    color: white;
+    font-size: 1rem;
+}
+
+.playlistname {
+    padding-left: 30px;
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+}
+
+.admin {
+    padding-left: 30px;
+    color: white;
+    font-size: 1rem;
+}
+
+
+.middle-bar {
+    height: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espace entre l'icône et le texte */
+    background: #1ED7BE;
+    width: 225px;
+    height: 75px;
+    border-radius: 30px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+}
+
+.icon {
+    width: 36px;  /* Ajuste la taille de l'icône */
+    height: 36px;
+}
+
+.bottom-section {
+    height: 60%;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.playlist {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    overflow-y: auto; /* Permet le scroll si la liste est longue */
+}
+
+/* Style général des lignes */
+.track {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* Style spécifique pour la première ligne */
+.header-track {
+    font-weight: bold;
+}
+
+.separator {
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Numéro ou # */
+.track-number {
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    margin-right: 10px;
+}
+
+/* Espace vide pour aligner l'image */
+.track-img-placeholder {
+    width: 40px;
+    height: 40px;
+}
+
+/* Image des musiques */
+.track-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+/* Nom de la musique */
+.track-name {
+    flex-grow: 1;
+    margin-left: 10px;
+    color: white;
+    font-size: 1rem;
+}
+
+/* Temps ou logo pour la première ligne */
+.track-time,
+.track-options-icon {
+    color: white;
+    font-size: 0.9rem;
+
+}
+
+.track-options-icon {
+    width: 25px;
+    height: 25px;
+}
+
+.column-side {
+    flex: 0 0 20%;
+    padding: 1rem;
+    background: rgba(9, 21, 30, 0.8);
+    margin: 0 0.5rem;
+    border-radius: 30px;
+    height: 95%;
+
+
+
 }
