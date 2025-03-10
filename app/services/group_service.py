@@ -96,3 +96,12 @@ class GroupService:
         group.admin = group.members[rand]
 
         return
+
+        @classmethod
+        def join_group(cls, user_id, group_name):
+            storage_group = GroupStorage()
+            storage_user = UserStorage()
+            group = storage_group.get_group_by_name(group_name)
+            user = storage_user.get_user_by_id(user_id)
+
+            pass

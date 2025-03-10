@@ -35,3 +35,11 @@ async def remove_user_from_group(group: SimplifiedGroup):
         return {"message": f"Groupe '{group.group_name}' créé avec succès"}
     else:
         raise HTTPException(status_code=400, detail="Erreur lors de la création du groupe")
+
+
+@router.post("/join_group")
+async def join_group(group: SimplifiedGroup):
+    if GroupService.join_group(group.user_id, group.group_name):
+        return {"message": f"Vous avez rejoint le groupe '{group.group_name}'"}
+    else:
+        raise HTTPException(status_code=400, detail="Impossible de rejoindre le groupe")

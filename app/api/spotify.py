@@ -1,28 +1,15 @@
-import base64
-import os
-
-import requests
-from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 
+from app.models.spotify import SpotifyTokenRequest
+from app.services.spotify_service import SpotifyService
 from app.services.auth_service import AuthService
-
-
-# Charger les variables d'environnement du fichier .env
-load_dotenv()
-
-# Récupérer les variables d'environnement
-CLIENT_ID = os.getenv("CLIENT_ID")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-REDIRECT_URI = os.getenv("REDIRECT_URI")
 
 router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-# Endpoint pour lier le compte Spotify
 @router.get("/connect")
 async def connect_spotify(token: str = Depends(oauth2_scheme)):
     # Vérifier la validité du token utilisateur via AuthService
@@ -31,60 +18,64 @@ async def connect_spotify(token: str = Depends(oauth2_scheme)):
     if username is None:
         raise HTTPException(status_code=401, detail=error_message)
 
-    auth_url = (
-        f"https://accounts.spotify.com/authorize?response_type=code&client_id={CLIENT_ID}"
-        f"&redirect_uri={REDIRECT_URI}&scope=user-library-read user-read-private"
-    )
+    # Récupérer l'URL d'autorisation depuis le service Spotify
+    auth_url = SpotifyService.get_authorization_url()
+
     return {"auth_url": auth_url}
 
 
+# Endpoint pour récupérer le token Spotify
 @router.get("/callback")
-async def spotify_callback(code: str, token: str = Depends(oauth2_scheme)):
-    """
-    Récupère le token d'accès Spotify et lie le compte à l'utilisateur.
-    """
+async def spotify_callback(code: str):
+    try:
+        # Échanger le code d'autorisation contre un token d'accès
+        access_token = SpotifyService.exchange_code_for_token(code)
 
+        return {"access_token": access_token}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/link")
+async def spotify_link(
+        spotify_token_request: SpotifyTokenRequest,  # Le token Spotify dans le body
+        token: str = Depends(oauth2_scheme),  # Le token de l'utilisateur (Bearer token)
+):
     # Vérifier la validité du token utilisateur via AuthService
     username, error_message = AuthService.verify_token(token)
+
     if username is None:
         raise HTTPException(status_code=401, detail=error_message)
 
-    # Créer un en-tête d'autorisation avec les identifiants de Spotify
-    auth_header = {
-        "Authorization": f"Basic {base64.b64encode(f'{CLIENT_ID}:{CLIENT_SECRET}'.encode()).decode()}"
-    }
+    # Récupérer le token Spotify envoyé dans le body de la requête
+    spotify_token = spotify_token_request.spotify_token
 
-    # Échanger le code d'autorisation contre un token d'accès
-    response = requests.post(
-        "https://accounts.spotify.com/api/token",
-        data={
-            "grant_type": "authorization_code",
-            "code": code,  # Le code reçu de Spotify
-            "redirect_uri": REDIRECT_URI,
-        },
-        headers=auth_header,
-    )
+    try:
+        # Enregistrer le token Spotify pour cet utilisateur
+        AuthService.set_spotify_token(username, spotify_token)
 
-    if response.status_code != 200:
-        raise HTTPException(status_code=500, detail="Erreur lors de la récupération du token Spotify")
+        return {"message": "Le compte Spotify a été lié avec succès."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
-    data = response.json()
-    spotify_access_token = data["access_token"]
 
-    # Utiliser l'API Spotify pour obtenir des informations sur l'utilisateur
-    user_response = requests.get(
-        "https://api.spotify.com/v1/me",
-        headers={"Authorization": f"Bearer {spotify_access_token}"},
-    )
+# Endpoint pour récupérer le morceau en cours de lecture pour l'utilisateur
+@router.get("/current-playback")
+async def current_playback(token: str = Depends(oauth2_scheme)):
+    # Vérifier la validité du token utilisateur via AuthService
+    username, error_message = AuthService.verify_token(token)
 
-    if user_response.status_code != 200:
-        raise HTTPException(status_code=500, detail="Erreur lors de la récupération des informations Spotify")
+    if username is None:
+        raise HTTPException(status_code=401, detail=error_message)
 
-    spotify_user_info = user_response.json()
+    try:
+        # Utiliser le token Spotify pour récupérer le morceau en cours de lecture
+        spotify_token = AuthService.get_spotify_token(username)
+        if spotify_token is None:
+            raise HTTPException(status_code=401, detail=error_message)
 
-    # Lier le compte Spotify avec l'utilisateur
-    success, message = AuthService.link_spotify_account(username, spotify_user_info)
-    if success:
-        return {"message": "Compte Spotify lié avec succès"}
-    else:
-        raise HTTPException(status_code=400, detail=message)
+        playback = SpotifyService.get_current_playback(spotify_token)
+
+        return {"track": playback}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
