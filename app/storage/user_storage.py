@@ -1,25 +1,6 @@
 import json
 from app.models.user import User
 
-'''
-users.json: 
-{
-  "users": [
-    {
-      "id": 1,
-      "username": "Will smith",
-      "password": "123456",
-      "token": "token1",
-      "tokenExpiration": "2021-12-31T23:59:59.999Z",
-      "groupId": -1,
-      "spotifyToken": "spotify_token1",
-      "spotifyTokenExpiration": "2021-12-31T23:59:59.999Z"
-    }
-    ],
-  "lastUserId": 1
-}
-'''
-
 
 class UserStorage:
 
@@ -80,4 +61,12 @@ class UserStorage:
         if len(self.data["user"]) < initial_length:
             self.save_data()
             return True
+        return False
+
+    def update_user(self, user: User):
+        for i, u in enumerate(self.data["users"]):
+            if u["id"] == user.id:
+                self.data["users"][i] = user.dict()
+                self.save_data()
+                return True
         return False

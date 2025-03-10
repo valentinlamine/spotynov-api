@@ -61,9 +61,6 @@ class AuthService:
 
     @staticmethod
     def create_access_token(data: dict):
-        """
-        Génère un token JWT avec une date d'expiration.
-        """
         to_encode = data.copy()
         expire = datetime.datetime.utcnow() + datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         to_encode.update({"exp": expire})
@@ -72,14 +69,35 @@ class AuthService:
 
     @staticmethod
     def verify_token(token: str):
-        """
-        Vérifie si un token est valide.
-        """
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             username: str = payload.get("sub")
             if username is None:
                 return None
-            return username
+            return username, "Token valide"
         except jwt.ExpiredSignatureError:
             return None, "Token expiré"
+
+    @staticmethod
+    def link_spotify_account(username: str, spotify_user_info: dict):
+        # Récupérer l'utilisateur dans la base de données à partir de son nom d'utilisateur
+        storage = UserStorage()
+        user = storage.get_user_by_name(username)
+
+        if not user:
+            return False, "Utilisateur non trouvé"
+
+        # Lier les informations Spotify à l'utilisateur
+        user.spotifyId = spotify_user_info["id"]
+        user.spotifyDisplayName = spotify_user_info.get("display_name", "")
+        user.spotifyUrl = spotify_user_info.get("external_urls", {}).get("spotify", "")
+        user.spotifyImageUrl = spotify_user_info.get("images", [{}])[0].get("url", "")
+
+        # Mettre à jour l'utilisateur dans le stockage
+        success = storage.update_user(user)
+
+        # Si la mise à jour échoue, retourner une erreur
+        if not success:
+            return False, "Erreur lors de la mise à jour des informations de l'utilisateur"
+
+        return True, "Compte Spotify lié avec succès"

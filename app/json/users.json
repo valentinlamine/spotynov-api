@@ -1,15 +1,19 @@
 {
     "users": [
         {
-            "id": 6,
+            "id": 2,
             "username": "valouz",
-            "password": "$2b$12$ehSqBf0kp/DbtAz8OS.zr.z/xCCsoH7XUcS/3ScKx6pyFTmUUNTHG",
+            "password": "$2b$12$6wfCkjBZOWCgOl2p2GfwfOsPFacNd9rpzD2vA8MMc7w6O/WPFztMG",
             "token": null,
             "tokenExpiration": null,
             "groupName": null,
             "spotifyToken": null,
-            "spotifyTokenExpiration": null
+            "spotifyTokenExpiration": null,
+            "spotifyId": null,
+            "spotifyDisplayName": null,
+            "spotifyUrl": null,
+            "spotifyImageUrl": null
         }
     ],
-    "lastUserId": 6
+    "lastUserId": 2
 }

@@ -18,3 +18,7 @@ class User(BaseModel):
     groupName: str = None
     spotifyToken: str = None
     spotifyTokenExpiration: datetime = None
+    spotifyId: str = None
+    spotifyDisplayName: str = None
+    spotifyUrl: str = None
+    spotifyImageUrl: str = None
