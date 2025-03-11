@@ -1,3 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* Fond de la page */
 body {
     margin: 0;
@@ -11,7 +17,6 @@ body {
 
 /* Conteneur principal */
 .container {
-    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,9 +25,7 @@ body {
 
 /* Formulaire */
 .form-container {
-    position: relative;
-    max-width: 700px;
-    width: 100%;
+    max-width: 600px;
     padding: 2rem;
     background: rgba(9, 21, 30, 0.8);
     backdrop-filter: blur(10px);
@@ -33,7 +36,6 @@ body {
 
 .form-content {
     width: 100%;
-    max-width: 400px;
     margin: 0 auto;
 }
 
@@ -74,7 +76,12 @@ h2 {
     font-weight: 500;
 }
 
-/* Champs du formulaire */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
 .input-group {
     margin-bottom: 1rem;
 }
@@ -82,7 +89,7 @@ h2 {
 .input-group label {
     display: block;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: bold;
     color: white;
 }
 
@@ -99,15 +106,6 @@ h2 {
     outline: none;
 }
 
-/* Champ mot de passe */
-.password-group {
-    position: relative;
-}
-
-.password-wrapper {
-    position: relative;
-}
-
 .eye-icon {
     position: absolute;
     right: 12px;
@@ -119,16 +117,23 @@ h2 {
 }
 
 /* Bouton de connexion */
-#login-btn {
+.login-btn {
     width: 100%;
     background: #1ed7be;
     color: #09151e;
     font-weight: bold;
+    font-size: 16px;
     padding: 12px;
     border-radius: 50px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
     cursor: pointer;
     border: none;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.login-btn:hover {
+    transform: scale(1.05);
+    background: #17b899;
 }
 
 /* Liens et options utilisateur */

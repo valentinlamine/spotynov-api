@@ -20,19 +20,19 @@
 
             <form id="login-form" method="post">
                 <div class="input-group">
-                    <label for="pseudo">Pseudo</label>
+                    <label class="label" for="pseudo">Pseudo</label>
                     <input type="text" id="pseudo" placeholder="pseudoexample">
                 </div>
 
-                <div class="input-group password-group">
-                    <label for="password">Mot de passe</label>
+                <div class="input-group">
+                    <label class="label" for="password">Mot de passe</label>
                     <div class="password-wrapper">
                         <input type="password" id="password" placeholder="Votre mot de passe">
-                        <img src="/assets/icons/EyeSlash.svg" alt="Synchroniser" class="eye-icon" onclick="togglePasswordVisibility(this)">
+                        <span class="eye-icon" onclick="togglePasswordVisibility()"></span>
                     </div>
                 </div>
 
-                <button id="login-btn">Se connecter</button>
+                <button id="login-btn" onclick="signIn()">Se connecter</button>
 
                 <div class="user-options">
                     <div class="line-separator"></div>
