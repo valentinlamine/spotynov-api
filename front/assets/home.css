@@ -6,6 +6,8 @@
 body, html {
     height: 100%;
     background-image: url('background/rectangle-3.png');
+    background-repeat: no-repeat;
+    background-size: cover;
     overflow: hidden;
     font-family: Inter, sans-serif;
 }
@@ -127,6 +129,26 @@ header {
     width: 100%;
 }
 
+/* Personnalisation de la scrollbar */
+.middle-section.bottom-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.middle-section.bottom-section::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1); /* Couleur de fond */
+    border-radius: 10px;
+}
+
+.middle-section.bottom-section::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3); /* Couleur de la barre */
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.middle-section.bottom-section::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5); /* Légèrement plus visible au survol */
+}
+
 .top-section {
     height: 25%;
     display: flex;
@@ -206,7 +228,6 @@ header {
 
 .bottom-section {
     height: 60%;
-    flex-grow: 1;
     overflow-y: auto;
 }
 
@@ -312,6 +333,30 @@ header {
     width: 100%;
     display: flex;
     flex-direction: column;
+    overflow-y: auto; /* Active la barre de scroll si nécessaire */
+    max-height: 400px; /* Ajuste cette valeur selon ton design */
+    padding-right: 10px; /* Pour éviter que la scrollbar cache le contenu */
+    scroll-behavior: smooth; /* Scroll fluide */
+}
+
+/* Personnalisation de la scrollbar */
+.column-side-bottom-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.column-side-bottom-section::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.column-side-bottom-section::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.column-side-bottom-section::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .column-side-bottom-section h2 {
@@ -321,7 +366,7 @@ header {
 
 .right-column-side {
     flex: 0 0 20%;
-    padding: 2rem;
+    padding: 1rem;
     background: rgba(9, 21, 30, 0.8);
     margin: 0 0.5rem;
     border-radius: 30px;
@@ -338,7 +383,36 @@ header {
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    overflow-y: auto; /* Active la barre de scroll si nécessaire */
+    max-height: 400px; /* Ajuste selon ton design */
+    padding-right: 10px; /* Pour éviter que la scrollbar cache le contenu */
+    scroll-behavior: smooth; /* Scroll fluide */
 }
+
+/* Personnalisation de la scrollbar */
+.right-column-side-bottom-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.right-column-side-bottom-section::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.right-column-side-bottom-section::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.right-column-side-bottom-section::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+
 
 .memberlist {
     font-size: 20px;
@@ -346,7 +420,6 @@ header {
     margin: 15px;
     cursor: pointer;
     padding: 10px;
-    width: 100%;
     text-align: center;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
