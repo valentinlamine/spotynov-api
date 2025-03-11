@@ -111,8 +111,6 @@ class GroupService:
         if user_group_name == group_name:
             return False, f"Vous êtes déjà dans le groupe '{group_name}'"
 
-        if user_group_name is not None:
-            GroupService.remove_user_from_group(user_id)
         if storage_group.join_group(user_id, group_name):
             return True, f"Vous avez rejoint le groupe '{group_name}'"
         return False, f"Impossible de rejoindre le groupe '{group_name}'"

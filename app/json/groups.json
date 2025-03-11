@@ -12,13 +12,7 @@
             "name": "les pas nez2",
             "admin": 3,
             "members": [
-                3
-            ]
-        },
-        {
-            "name": "les pas nez24",
-            "admin": 16,
-            "members": [
+                3,
                 16
             ]
         }

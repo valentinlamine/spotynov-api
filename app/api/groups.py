@@ -95,6 +95,10 @@ async def join_group(
 
     user_id = AuthService.get_user_id(username)
 
+    group_name = GroupService.get_user_group_name(user_id)
+    if group_name:
+        GroupService.remove_user_from_group(user_id)
+
     success, message = GroupService.join_group(user_id, name.name)
 
     if success:
