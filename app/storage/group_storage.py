@@ -79,12 +79,11 @@ class GroupStorage:
         return []
 
     def delete_group_by_name(self, group_name):
-        initial_length = len(self.data["groups"])
-        self.data["groups"] = [group for group in self.data["groups"] if group["name"] != group_name]
-        if len(self.data["groups"]) < initial_length:
-            self.save_data()
-            return True
-        return False
+        for group in self.data["groups"]:
+            if group["name"] == group_name:
+                self.data["groups"].remove(group)
+                self.save_data()
+                return True
 
     def is_user_admin(self, user_id, group_name):
         for group in self.data["groups"]:

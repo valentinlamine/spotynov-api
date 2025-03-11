@@ -6533,7 +6533,15 @@
                     }
                 }
             ]
+        },
+        {
+            "id": 19,
+            "username": "ratio",
+            "password": "$2b$12$uaC8jQ/fV6FVT5QSr6/lKe5.jJVHd6rBomFNgVqfp8GodLvsnuYee",
+            "groupName": null,
+            "spotifyToken": null,
+            "likedPlaylist": []
         }
     ],
-    "lastUserId": 18
+    "lastUserId": 19
 }

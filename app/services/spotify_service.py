@@ -6,7 +6,6 @@ import os
 import requests
 from dotenv import load_dotenv
 
-from app.services.personality_service import SpotifyAnalyzer
 
 load_dotenv()
 
@@ -96,13 +95,27 @@ class SpotifyService:
         return response.json()["items"]
 
     @staticmethod
-    def analyze_personality(audio_features: list) -> dict:
+    def analyze_tracks(spotify_token: str, track_ids: list) -> dict:
 
-        # Analyse la personnalité musicale de l'utilisateur à partir des caractéristiques audio.
+        if not track_ids:
+            return {"error": "Aucun track ID fourni."}
+
+        headers = {"Authorization": f"Bearer {spotify_token}"}
+        audio_features = []
+        batch_size = 100
+
+        for i in range(0, len(track_ids), batch_size):
+            batch_ids = ",".join(track_ids[i:i + batch_size])
+            response = requests.get(f"{SpotifyService.SPOTIFY_API_URL}/audio-features?ids={batch_ids}",
+                                    headers=headers)
+
+            if response.status_code == 200:
+                audio_features.extend(response.json().get("audio_features", []))
 
         if not audio_features:
-            return {}
+            return {"error": "Impossible de récupérer les caractéristiques audio."}
 
+        # Analyse des traits de personnalité
         traits = ["danceability", "energy", "valence"]
         personality_traits = {trait: sum(track[trait] for track in audio_features if track) / len(audio_features)
                               for trait in traits}
@@ -110,47 +123,14 @@ class SpotifyService:
         return personality_traits
 
     @staticmethod
-    def get_audio_features(spotify_token: str, track_ids: list) -> list:
+    def get_personality(spotify_token: str) -> dict:
 
-        # Récupère les caractéristiques audio des morceaux en envoyant des requêtes par batch de 100 (limite API).
-
-        headers = {"Authorization": f"Bearer {spotify_token}"}
-        audio_features = []
-        batch_size = 100  # Spotify permet max 100 IDs par requête
-
-        for i in range(0, len(track_ids), batch_size):
-            batch_ids = ",".join(track_ids[i:i + batch_size])
-            url = f"{SpotifyAnalyzer.SPOTIFY_API_URL}/audio-features?ids={batch_ids}"
-            response = requests.get(url, headers=headers)
-
-            if response.status_code == 200:
-                audio_features.extend(response.json().get("audio_features", []))
-
-        return audio_features
-
-    @staticmethod
-    def get_personality(spotify_token: str, limit: int = 50) -> dict:
-
-        # Fonction principale qui récupère les titres likés, analyse leurs caractéristiques et en déduit la personnalité musicale.
-
-        liked_tracks = SpotifyAnalyzer.get_liked_tracks(spotify_token, limit)
+        liked_tracks = SpotifyService.get_last_liked_songs(spotify_token)  
         if not liked_tracks:
-            return {"error": "Aucun titre liké trouvé ou problème d'accès à Spotify."}
+            return {"error": "Aucun titre liké trouvé."}
 
-        # Extraire les track IDs
         track_ids = [track["track"]["id"] for track in liked_tracks if "track" in track]
-        if not track_ids:
-            return {"error": "Impossible d'extraire les IDs des morceaux."}
-
-        # Récupération des caractéristiques audio
-        audio_features = SpotifyAnalyzer.get_audio_features(spotify_token, track_ids)
-        if not audio_features:
-            return {"error": "Impossible de récupérer les caractéristiques audio."}
-
-        # Analyse de personnalité
-        personality = SpotifyAnalyzer.analyze_personality(audio_features)
-
-        return {"personality_traits": personality}
+        return {"personality_traits": SpotifyService.analyze_tracks(spotify_token, track_ids)}
 
 
 
