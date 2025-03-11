@@ -51,7 +51,7 @@
     gap: 2rem;
   }
 
-  label {
+  .label {
     color: white;
     font-size: 14px;
     font-weight: bold;
@@ -61,11 +61,16 @@
   .input {
     width: 100%;
     padding: 0.75rem;
+    margin-top: 0.5rem;
     background-color: #202c34;
     border: 1px solid #3f4d54;
     border-radius: 0.375rem;
     color: #ecfefe;
     font-size: 1rem;
+  }
+
+  .input-container {
+    margin-bottom: 1rem;
   }
 
   .signup-btn {

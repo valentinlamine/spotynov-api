@@ -11,19 +11,50 @@
 <body>
     <div class="container">
         <header>
-            <h1>Header</h1>
+            <div class="header-side">
+
+            </div>
+            <div class="header-middle">
+                <div class="search-container">
+                    <!-- Conteneur pour la barre de recherche -->
+                    <div class="search-box">
+                        <img src="../assets/icons/MagnifyingGlass.svg" alt="Recherche" class="search-icon">
+                        <input type="text" placeholder="Rechercher un groupe" class="search-bar">
+                    </div>
+                </div>
+            </div>
+            <div class="header-side">
+                <div class="logout-container">
+                    <img src="../assets/icons/Deconnexion.svg" alt="Se déconnecter" class="logout-icon" height="25" width="25">
+                    <span class="logout-text">Se déconnecter</span>
+                </div>
+            </div>
         </header>
         <div class="content">
             <div class="column-side">
-                <!-- Column 1 content here -->
+                <div class="column-side-top-section">
+                    <h2>Mon Groupe</h2>
+                    <div class="track">
+                        <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
+                        <span class="track-name">Nom du groupe</span>
+                    </div>
+
+                </div>
+                <span class="column-side-separator"></span>
+                <div class="column-side-bottom-section">
+                    <h2>Autres Groupes</h2>
+                    <div class="track">
+                        <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
+                        <span class="track-name">Nom du groupe</span>
+                    </div>
+                </div>
             </div>
             <div class="column-middle">
                 <div class="middle-section top-section">
-                    <div class="image">
+                    <img src="../assets/background/rectangle-1.png" alt="Cover" class="image">
 
-                    </div>
                     <div class="information">
-                        <div class="playlist">
+                        <div>
                             <p class="title">Playlist</p>
                         </div>
                         <div>
@@ -42,12 +73,12 @@
                 </div>
                 <div class="middle-section bottom-section">
                     <div class="playlist">
-    <!-- Ligne spéciale (Header) -->
+                        <!-- Ligne spéciale (Header) -->
                         <div class="track header-track">
                             <span class="track-number">#</span>
                             <span class="track-img-placeholder"></span> <!-- Espace vide pour aligner -->
                             <span class="track-name">Titre</span>
-                            <img src="../assets/icons/Timer.png" alt="Options" class="track-options-icon">
+                            <img src="../assets/icons/Timer.svg" alt="Options" class="track-options-icon">
                         </div>
                         <span class="separator"></span>
 
@@ -74,7 +105,23 @@
                 </div>
             </div>
             <div class="column-side">
-                <!-- Column 3 content here -->
+                <div class="right-column-side-top-section">
+                    <h2>Membre(s) du groupe</h2>
+                </div>
+                <div class="right-column-side-bottom-section">
+                    <div class="memberlist">
+                        <span class="member-name">Membre du groupe</span>
+                    </div>
+                    <div class="memberlist">
+                        <span class="member-name">Membre du groupe</span>
+                    </div>
+                    <div class="memberlist">
+                        <span class="member-name">Membre du groupe</span>
+                    </div>
+                    <div class="memberlist">
+                        <span class="member-name">Membre du groupe</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

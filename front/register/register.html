@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,45 +9,41 @@
 <body>
   <div class="container">
     <div class="form-container">
-      <div class="form-content">
-        <p class="title">
-        Inscription
-      </p>
+        <div class="form-content">
+            <p class="title">Inscription</p>
 
-      <!-- Texte plus petit pour la description -->
-      <p class="subtitle">
-        Ecoutez de la musique en ligne avec vos amis en toute simplicité.
-      </p>
+            <!-- Texte plus petit pour la description -->
+            <p class="subtitle">Écoutez de la musique en ligne avec vos amis en toute simplicité.</p>
 
-      <!-- Formulaire d'inscription -->
-      <form method="post" class="form">
+            <!-- Formulaire d'inscription -->
+            <form method="post" class="form">
 
-        <!-- Ligne de séparation avec le texte "ou" au milieu -->
-        <div class="separator">
-          <div class="separator-line"></div>
+                <!-- Ligne de séparation avec le texte "ou" au milieu -->
+                <div class="separator">
+                    <div class="separator-line"></div> <!-- CORRECTION ICI -->
+                </div>
 
-        <div>
-          <label for="pseudo" class="label">Pseudo</label>
-          <input type="text" id="pseudo" placeholder="Votre pseudo" class="input" />
-        </div>
+                <div class="input-container">
+                    <label for="pseudo" class="label">Pseudo</label>
+                    <input type="text" id="pseudo" placeholder="Votre pseudo" class="input" />
+                </div>
 
-        <div class="input-container">
-          <label for="password" class="label">Mot de passe</label>
-          <input id="password" placeholder="Votre mot de passe" class="input">
+                <div class="input-container">
+                    <label for="password" class="label">Mot de passe</label>
+                    <input id="password" placeholder="Votre mot de passe" class="input">
 
-          <!-- Bouton pour afficher/masquer le mot de passe -->
-          <span class="toggle-password"></span>
-        </div>
+                    <!-- Bouton pour afficher/masquer le mot de passe -->
+                    <span class="toggle-password"></span>
+                </div>
 
-        <div class="input-container">
-          <label for="confirmPassword" class="label">Confirmez le mot de passe</label>
-          <input id="confirmPassword" placeholder="Confirmez votre mot de passe"
-                 name="confirmPassword"
-                 class="input">
+                <div class="input-container">
+                    <label for="confirmPassword" class="label">Confirmez le mot de passe</label>
+                    <input id="confirmPassword" placeholder="Confirmez votre mot de passe"
+                        name="confirmPassword" class="input">
 
-          <!-- Bouton pour afficher/masquer la confirmation du mot de passe -->
-          <span class="toggle-password"></span>
-        </div>
+                    <!-- Bouton pour afficher/masquer la confirmation du mot de passe -->
+                    <span class="toggle-password"></span>
+                </div>
 
         <!-- Bouton s'inscrire -->
         <button class="signup-btn">S'inscrire</button>
