@@ -53,17 +53,21 @@ class GroupService:
         return
 
     @staticmethod
-    def remove_user_from_group(user_id: int, group_name: str):
+    def remove_user_from_group(user_id: int):
         storage_group = GroupStorage()
-        # si l'utilisateur est le dernier membre du groupe, on supprime le groupe
-        if len(storage_group.get_group_members(user_id, group_name)) == 1:
+        group_name = storage_group.get_user_group_name(user_id)
+        # vérifie si l'utilisateur est dans un groupe
+        if group_name is None:
+            return False
+        # vérifie si l'utilisateur est l'admin du groupe
+        if storage_group.is_user_admin(user_id, group_name):
+            storage_group.set_random_admin(user_id, group_name)
+        # vérifie si l'utilisateur est le seul membre du groupe
+        members = storage_group.get_group_members(user_id)
+        if len(members) == 1:
             storage_group.delete_group_by_name(group_name)
         else:
-            # si l'utilisateur est l'admin du groupe, on désigne un autre admin
-            if storage_group.is_user_admin(user_id, group_name):
-                storage_group.set_random_admin(user_id, group_name)
             storage_group.remove_user_from_group(user_id, group_name)
-
         return True
 
     @staticmethod
@@ -76,13 +80,13 @@ class GroupService:
             storage.save_data()
             return True
         return False
-"""
+
     @staticmethod
-    def get_group_members(username: str):
+    def get_group_members(user_id: int):
         storage_group = GroupStorage()
-        if user_id in storage_group.get_group_by_name(group_name).members:
-            return storage_group.get_group_by_name(group_name).members
-        return []
+        return storage_group.get_group_members(user_id)
+
+
 
     @staticmethod
     def set_random_admin(group_name: str):
@@ -97,29 +101,23 @@ class GroupService:
         return
 
     @staticmethod
-    def join_group(self, user_id: int, group_name: str):
+    def join_group(user_id: int, group_name: str):
         storage_group = GroupStorage()
-        storage_user = UserStorage()
-        grp: any
-
+        # check if group exists
         if storage_group.get_group_by_name(group_name) is None:
-            self.create_group(group_name, user_id)
-        else:
-            grp = storage_group.get_group_by_name(group_name)
+            return False, f"Le groupe '{group_name}' n'existe pas"
+        user_group_name = storage_group.get_user_group_name(user_id)
+        # vérifie si l'utilisateur est déjà dans le groupe
+        if user_group_name == group_name:
+            return False, f"Vous êtes déjà dans le groupe '{group_name}'"
 
-        if user_id in grp.members:
-            return False
-
-        grp.members.append(user_id)
-        storage_user.get_user_by_id(user_id).groupName = group_name
-
-        storage_group.save_data()
-
-        return True
+        if user_group_name is not None:
+            GroupService.remove_user_from_group(user_id)
+        if storage_group.join_group(user_id, group_name):
+            return True, f"Vous avez rejoint le groupe '{group_name}'"
+        return False, f"Impossible de rejoindre le groupe '{group_name}'"
 
     @staticmethod
     def get_user_group_name(user_id: int):
         storage = GroupStorage()
         return storage.get_user_group_name(user_id)
-
-"""

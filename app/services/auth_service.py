@@ -122,3 +122,13 @@ class AuthService:
             return None
 
         return user["id"]
+
+    @classmethod
+    def get_username_by_id(cls, user_id):
+        storage = UserStorage()
+        user = storage.get_user_by_id(user_id)
+
+        if not user:
+            return None
+
+        return user["username"]

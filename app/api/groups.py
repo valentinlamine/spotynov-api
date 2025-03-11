@@ -56,25 +56,48 @@ async def list_members(token: str = Depends(oauth2_scheme)):
     if username is None:
         raise HTTPException(status_code=401, detail=error_message)
 
-    members = GroupService.get_group_members(username)
+    user_id = AuthService.get_user_id(username)
+
+    members = GroupService.get_group_members(user_id)
     if members:
+        # transformer les ids en noms d'utilisateur
+        members = [AuthService.get_username_by_id(member) for member in members]
         return {"members": members}
     else:
         raise HTTPException(status_code=404, detail="Groupe non trouvé")
 
-"""
-@router.post("/remove_user_from_group")
+
+@router.post("/leave")
 async def remove_user_from_group(token: str = Depends(oauth2_scheme)):
-    if GroupService.remove_user_from_group(group.user_id, group.group_name):
-        return {"message": f"Groupe '{group.group_name}' créé avec succès"}
+    # Vérifier la validité du token utilisateur via AuthService
+    username, error_message = AuthService.verify_token(token)
+
+    if username is None:
+        raise HTTPException(status_code=401, detail=error_message)
+
+    user_id = AuthService.get_user_id(username)
+
+    if GroupService.remove_user_from_group(user_id):
+        return {"message": "Vous avez quitté le groupe"}
     else:
-        raise HTTPException(status_code=400, detail="Erreur lors de la création du groupe")
+        raise HTTPException(status_code=400, detail="Impossible de quitter le groupe")
 
 
-@router.post("/join_group")
-async def join_group(token: str = Depends(oauth2_scheme)):
-    if GroupService.join_group(group.user_id, group.group_name):
-        return {"message": f"Vous avez rejoint le groupe '{group.group_name}'"}
+@router.post("/join")
+async def join_group(
+        name: GroupName,
+        token: str = Depends(oauth2_scheme)):
+    # Vérifier la validité du token utilisateur via AuthService
+    username, error_message = AuthService.verify_token(token)
+
+    if username is None:
+        raise HTTPException(status_code=401, detail=error_message)
+
+    user_id = AuthService.get_user_id(username)
+
+    success, message = GroupService.join_group(user_id, name.name)
+
+    if success:
+        return {"message": message}
     else:
-        raise HTTPException(status_code=400, detail="Impossible de rejoindre le groupe")
-"""
+        raise HTTPException(status_code=400, detail=message)

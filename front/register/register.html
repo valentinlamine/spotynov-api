@@ -30,17 +30,16 @@
 
                 <div class="input-container">
                     <label for="password" class="label">Mot de passe</label>
-                    <input id="password" placeholder="Votre mot de passe" class="input">
-
+                    <input type="password" id="password" placeholder="Votre mot de passe" class="input">
+                    <img src="/assets/icons/EyeSlash.svg" alt="Toggle Password" class="eye-icon" onclick="togglePasswordVisibility(this)" style="cursor: pointer;">
                     <!-- Bouton pour afficher/masquer le mot de passe -->
-                    <span class="toggle-password"></span>
                 </div>
 
                 <div class="input-container">
                     <label for="confirmPassword" class="label">Confirmez le mot de passe</label>
-                    <input id="confirmPassword" placeholder="Confirmez votre mot de passe"
+                    <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe"
                         name="confirmPassword" class="input">
-
+                    <img src="/assets/icons/EyeSlash.svg" alt="Toggle Password" class="eye-icon" onclick="toggleConfirmPasswordVisibility(this)" style="cursor: pointer;">
                     <!-- Bouton pour afficher/masquer la confirmation du mot de passe -->
                     <span class="toggle-password"></span>
                 </div>
@@ -52,7 +51,7 @@
         </div>
       </form>
 
-        <script src="../assets/javascript/register.js"></script>
+        <script src="../assets/javascript/auth.js"></script>
     </div>
   </div>
   </div>

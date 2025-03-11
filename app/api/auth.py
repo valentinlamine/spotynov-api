@@ -38,3 +38,4 @@ async def verify_token(token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=401, detail=error_message)
 
     return {"message": "Token valide", "username": username}
+

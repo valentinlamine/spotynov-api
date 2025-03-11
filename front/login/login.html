@@ -27,12 +27,12 @@
                 <div class="input-group">
                     <label class="label" for="password">Mot de passe</label>
                     <div class="password-wrapper">
-                        <input type="password" id="password" placeholder="Votre mot de passe">
-                        <span class="eye-icon" onclick="togglePasswordVisibility()"></span>
+                        <input type="password" id="password" placeholder="Votre mot de passe" class="input">
+                        <img src="/assets/icons/EyeSlash.svg" alt="Toggle Password" class="eye-icon" onclick="togglePasswordVisibility(this)" style="cursor: pointer;">
                     </div>
                 </div>
 
-                <button id="login-btn" onclick="signIn()">Se connecter</button>
+                <button class="login-btn" onclick="signIn()">Se connecter</button>
 
                 <div class="user-options">
                     <div class="line-separator"></div>

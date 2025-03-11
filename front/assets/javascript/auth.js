@@ -1,25 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
     const signupBtn = document.querySelector(".signup-btn");
-    signupBtn.addEventListener("click", signUp);
-});
+    if (signupBtn) signupBtn.addEventListener("click", signUp);
 
-document.addEventListener("DOMContentLoaded", () => {
-    const loginBtn = document.querySelector("#login-btn");
-    loginBtn.addEventListener("click", signIn);
+    const loginBtn = document.querySelector(".login-btn");
+    if (loginBtn) loginBtn.addEventListener("click", signIn);
+
+    checkAuthOnHome();
 });
 
 async function signUp(event) {
-    console.log("test");
     event.preventDefault();
 
-    let passwordField = document.getElementById("confirmPassword");
-    let confirmField = document.getElementById("password");
-
-    passwordField.type = "password";
-    passwordField.type = "password";
+    let passwordField = document.getElementById("password");
+    let confirmField = document.getElementById("confirmPassword");
 
     if (passwordField.value !== confirmField.value) {
-        alert("mot de passe mal tapé");
+        alert("Mot de passe mal tapé");
         return;
     }
 
@@ -28,71 +24,78 @@ async function signUp(event) {
         password: passwordField.value
     };
 
-    const response = await fetch("http://127.0.0.1:8000/api/auth/signup/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(userData),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-        alert("Inscription réussie");
-        const response2 = await fetch("http://127.0.0.1:8000/api/auth/login/", {
+    try {
+        const response = await fetch("http://127.0.0.1:8000/api/auth/signup/", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userData),
         });
 
-        const data2 = await response2.json();
+        const data = await response.json();
 
-        if (response2.ok) {
-            localStorage.setItem("token", data2.token);
-            window.location.href = "http://localhost:8000/home";
-        }
+        if (!response.ok) throw new Error(data.detail || "Erreur lors de l'inscription");
+
+        alert("Inscription réussie, connexion en cours...");
+
+        // Connexion automatique après l'inscription
+        await signIn(event, userData);
+    } catch (error) {
+        alert(error.message);
     }
-
-    alert(data.message);
 }
 
-async function signIn(event) {
-    event.preventDefault();
+async function signIn(event, userData = null) {
+    if (event) event.preventDefault();
 
-    const pseudo = document.getElementById('pseudo').value;
-    const password = document.getElementById('password').value;
-
-    password.type = "password";
-
-    const data = {
-        username: pseudo,
-        password: password
-    };
+    const pseudo = userData ? userData.username : document.getElementById("pseudo").value;
+    const password = userData ? userData.password : document.getElementById("password").value;
 
     try {
-        const response = await fetch('http://localhost:8000/api/auth/login', {
+        const response = await fetch('http://127.0.0.1:8000/api/auth/login/', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: pseudo, password: password }),
         });
-
-        if (!response.ok) {
-            throw new Error('Identifiants incorrects');
-        }
 
         const result = await response.json();
 
-        localStorage.setItem('token',
-            result["token"]);
+        if (!response.ok) throw new Error(result.detail || "Identifiants incorrects");
 
-        window.location.href = 'http://localhost:8000/home';
+        localStorage.setItem("token", result.token);
+        window.location.href = "home"; // Redirection après connexion
     } catch (error) {
         alert(error.message);
+    }
+}
+
+// 🔐 Vérifie si l'utilisateur est connecté avant d'afficher la page home
+async function checkAuthOnHome() {
+    if (!window.location.pathname.includes("home")) return;
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        alert("Vous devez être connecté pour accéder à cette page.");
+        window.location.href = "http://127.0.0.1:8000/login"; // Redirection vers la connexion
+        return;
+    }
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/api/auth/verify-token", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) throw new Error("Session expirée ou accès non autorisé");
+
+        const data = await response.json();
+        document.getElementById("welcome-message").innerText = data.message;
+    } catch (error) {
+        alert(error.message);
+        localStorage.removeItem("token"); // Supprime le token en cas d'erreur
+        window.location.href = "http://127.0.0.1:8000/login"; // Redirection vers la connexion
     }
 }
 

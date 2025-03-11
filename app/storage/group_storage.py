@@ -25,6 +25,7 @@ from app.models.group import Group
 }
 """
 
+
 class GroupStorage:
 
     def __init__(self, filepath="app/json/groups.json"):
@@ -71,16 +72,15 @@ class GroupStorage:
                 return True
         return False
 
-    def get_group_members(self, user_id, group_name):
-        # return the list of members of the group
+    def get_group_members(self, user_id):
         for group in self.data["groups"]:
-            if group["name"] == group_name:
+            if user_id in group["members"]:
                 return group["members"]
+        return []
 
     def delete_group_by_name(self, group_name):
         initial_length = len(self.data["groups"])
         self.data["groups"] = [group for group in self.data["groups"] if group["name"] != group_name]
-
         if len(self.data["groups"]) < initial_length:
             self.save_data()
             return True
@@ -97,28 +97,26 @@ class GroupStorage:
         for group in self.data["groups"]:
             if group["name"] == group_name:
                 members = group["members"]
-
                 # Retirer l'admin actuel du tirage au sort
                 members_without_current_admin = [member for member in members if member != user_id]
-
                 if len(members_without_current_admin) == 0:
                     # Si tous les membres sont déjà l'administrateur actuel, on ne peut pas tirer au sort
                     return False
-
                 # Tirage aléatoire d'un membre
                 new_admin = random.choice(members_without_current_admin)
-
                 # Mise à jour de l'administrateur
                 group["admin"] = new_admin
                 self.save_data()
                 return True
         return False
 
-    def get_group_members(self, user_id, group_name):
-        for group in self.data["groups"]:
-            if group["name"] == group_name:
-                return group["members"]
-        return []
-
     def get_groups(self):
         return self.data["groups"]
+
+    def join_group(self, user_id, group_name):
+        for group in self.data["groups"]:
+            if group["name"] == group_name:
+                group["members"].append(user_id)
+                self.save_data()
+                return True
+        return False
