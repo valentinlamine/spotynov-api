@@ -70,3 +70,5 @@ class UserStorage:
                 self.save_data()
                 return True
         return False
+
+

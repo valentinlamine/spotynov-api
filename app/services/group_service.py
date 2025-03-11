@@ -1,4 +1,6 @@
 # app/services/group_service.py
+from tokenize import group
+
 from app.storage.group_storage import GroupStorage
 from app.storage.user_storage import UserStorage
 from app.models.group import Group
@@ -89,19 +91,35 @@ class GroupService:
     def set_random_admin(group_name: str):
         storage = GroupStorage()
 
-        group = storage.get_group_by_name(group_name)
+        grp = storage.get_group_by_name(group_name)
 
-        rand = random.randint(0, group.members.count() - 1)
+        rand = random.randint(0, grp.members.count() - 1)
 
-        group.admin = group.members[rand]
+        grp.admin = grp.members[rand]
 
         return
 
-        @classmethod
-        def join_group(cls, user_id, group_name):
-            storage_group = GroupStorage()
-            storage_user = UserStorage()
-            group = storage_group.get_group_by_name(group_name)
-            user = storage_user.get_user_by_id(user_id)
+    @staticmethod
+    def join_group(self, user_id: int, group_name: str):
+        storage_group = GroupStorage()
+        storage_user = UserStorage()
+        grp: any
 
-            pass
+        if storage_group.get_group_by_name(group_name) is None:
+            self.create_group(group_name, user_id)
+        else:
+            grp = storage_group.get_group_by_name(group_name)
+
+
+        if user_id in grp.members:
+            return False
+
+        grp.members.append(user_id)
+        storage_user.get_user_by_id(user_id).groupName = group_name
+
+        storage_group.save_data()
+
+        return True
+
+
+
