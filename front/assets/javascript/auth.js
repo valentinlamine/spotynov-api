@@ -4,8 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const loginBtn = document.querySelector(".login-btn");
     if (loginBtn) loginBtn.addEventListener("click", signIn);
-
-    checkAuthOnHome();
 });
 
 async function signUp(event) {
@@ -60,6 +58,16 @@ async function signIn(event, userData = null) {
         const result = await response.json();
 
         if (!response.ok) throw new Error(result.detail || "Identifiants incorrects");
+
+        fetch("http://127.0.0.1:8000/home", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${result.token}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error("Erreur:", error));
 
         localStorage.setItem("token", result.token);
         window.location.href = "home"; // Redirection après connexion

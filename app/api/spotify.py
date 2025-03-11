@@ -74,7 +74,7 @@ async def current_playback(token: str = Depends(oauth2_scheme)):
         # Utiliser le token Spotify pour récupérer le morceau en cours de lecture
         spotify_token = AuthService.get_spotify_token(username)
         if spotify_token is None:
-            raise HTTPException(status_code=401, detail=error_message)
+            raise HTTPException(status_code=401, detail="Erreur lors de la récupération du token Spotify")
 
         playback = SpotifyService.get_current_playback(spotify_token)
 
@@ -97,7 +97,7 @@ async def get_last_liked_songs(
         # Utiliser le token Spotify pour récupérer les derniers morceaux aimés
         spotify_token = AuthService.get_spotify_token(username.username)
         if spotify_token is None:
-            raise HTTPException(status_code=401, detail=error_message)
+            raise HTTPException(status_code=401, detail="Erreur lors de la récupération du token Spotify")
 
         liked_songs = SpotifyService.get_last_liked_songs(spotify_token, username.limit)
 
@@ -109,3 +109,23 @@ async def get_last_liked_songs(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
+@router.get("/analyze-tracks")
+async def analyze_tracks(token: str = Depends(oauth2_scheme)):
+    # Vérifier la validité du token utilisateur via AuthService
+    username, error_message = AuthService.verify_token(token)
+
+    if username is None:
+        raise HTTPException(status_code=401, detail=error_message)
+
+    try:
+        # Utiliser le token Spotify pour récupérer les morceaux aimés
+        spotify_token = AuthService.get_spotify_token(username)
+        if spotify_token is None:
+            raise HTTPException(status_code=401, detail="Erreur lors de la récupération du token Spotify")
+
+        personality = SpotifyService.get_personality(spotify_token)
+
+        return personality
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

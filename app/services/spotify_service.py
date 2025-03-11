@@ -85,55 +85,69 @@ class SpotifyService:
 
     @staticmethod
     def get_last_liked_songs(spotify_token, limit=10):
-        # Récupère les 10 derniers morceaux aimés par l'utilisateur
+        """
+        Récupère les morceaux aimés de l'utilisateur, avec gestion de la pagination.
+        Si `limit` est défini à 0, récupère tous les morceaux aimés.
+        """
         headers = {"Authorization": f"Bearer {spotify_token}"}
-        response = requests.get(f"https://api.spotify.com/v1/me/tracks?limit={limit}", headers=headers)
+        liked_songs = []
+        url = f"https://api.spotify.com/v1/me/tracks?limit={limit if limit > 0 else 50}"  # Limite de 50 morceaux par page
 
-        if response.status_code != 200:
-            raise Exception("Erreur lors de la récupération des morceaux aimés")
+        while url:
+            # Si on a une limite et qu'on avons déjà récupéré suffisamment de morceaux, on s'arrête
+            if limit > 0 and len(liked_songs) >= limit:
+                break
 
-        return response.json()["items"]
+            response = requests.get(url, headers=headers)
 
-    @staticmethod
-    def analyze_tracks(spotify_token: str, track_ids: list) -> dict:
+            if response.status_code != 200:
+                raise Exception("Erreur lors de la récupération des morceaux aimés")
 
-        if not track_ids:
-            return {"error": "Aucun track ID fourni."}
+            data = response.json()
+            liked_songs.extend(data["items"])  # Ajouter les morceaux récupérés à la liste
 
-        headers = {"Authorization": f"Bearer {spotify_token}"}
-        audio_features = []
-        batch_size = 100
+            # Si la limite est définie à 0, on continue à récupérer la pagination jusqu'à ce qu'il n'y ait plus de pages
+            if limit == 0:
+                url = data.get("next")
+            else:
+                break  # Arrêter la récupération dès que le nombre de morceaux atteint la limite
 
-        for i in range(0, len(track_ids), batch_size):
-            batch_ids = ",".join(track_ids[i:i + batch_size])
-            response = requests.get(f"{SpotifyService.SPOTIFY_API_URL}/audio-features?ids={batch_ids}",
-                                    headers=headers)
-
-            if response.status_code == 200:
-                audio_features.extend(response.json().get("audio_features", []))
-
-        if not audio_features:
-            return {"error": "Impossible de récupérer les caractéristiques audio."}
-
-        # Analyse des traits de personnalité
-        traits = ["danceability", "energy", "valence"]
-        personality_traits = {trait: sum(track[trait] for track in audio_features if track) / len(audio_features)
-                              for trait in traits}
-
-        return personality_traits
+        # Si la limite est définie à 0 et que la pagination est finie, on renvoie la liste complète
+        return liked_songs[:limit] if limit > 0 else liked_songs
 
     @staticmethod
     def get_personality(spotify_token: str) -> dict:
+        """
+        Analyse les morceaux aimés de l'utilisateur pour déterminer sa personnalité,
+        et calcule la popularité et la durée moyennes de ses morceaux préférés.
+        """
+        # Récupérer tous les morceaux aimés de l'utilisateur
+        liked_tracks = SpotifyService.get_last_liked_songs(spotify_token)
 
-        liked_tracks = SpotifyService.get_last_liked_songs(spotify_token)  
         if not liked_tracks:
             return {"error": "Aucun titre liké trouvé."}
 
+        # Récupérer les IDs des morceaux pour l'analyse de personnalité
         track_ids = [track["track"]["id"] for track in liked_tracks if "track" in track]
-        return {"personality_traits": SpotifyService.analyze_tracks(spotify_token, track_ids)}
 
+        # Calculer la popularité et la durée moyennes
+        total_popularity = 0
+        total_duration_ms = 0
+        num_songs = len(liked_tracks)
 
+        for track in liked_tracks:
+            total_popularity += track["track"]["popularity"]
+            total_duration_ms += track["track"]["duration_ms"]
 
+        # Calculs de la popularité moyenne et de la durée moyenne
+        average_popularity = total_popularity / num_songs
+        average_duration_ms = total_duration_ms / num_songs
 
+        # Convertir la durée moyenne en secondes
+        average_duration_seconds = average_duration_ms / 1000
 
-
+        # Retourner les résultats
+        return {
+            "average_popularity": average_popularity,
+            "average_duration_seconds": average_duration_seconds
+        }

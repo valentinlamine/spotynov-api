@@ -33,10 +33,8 @@ async def verify_token(token: str = Depends(oauth2_scheme)):
     Vérifie la validité du token JWT et retourne les infos de l'utilisateur.
     """
     username, error_message = AuthService.verify_token(token)
-    if not token:
-        raise HTTPException(status_code=402, detail=error_message)
 
     if username is None:
         raise HTTPException(status_code=401, detail=error_message)
 
-    return {"message": "Token valide", "username": username}
+    return username
