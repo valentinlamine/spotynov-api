@@ -31,7 +31,7 @@
             </div>
         </header>
         <div class="content">
-            <div class="column-side">
+            <div class="left-column-side">
                 <div class="column-side-top-section">
                     <h2>Mon Groupe</h2>
                     <div class="track">
@@ -104,27 +104,28 @@
                     </div>
                 </div>
             </div>
-            <div class="column-side">
+            <div class="right-column-side">
                 <div class="right-column-side-top-section">
                     <h2>Membre(s) du groupe</h2>
                 </div>
-                <div class="right-column-side-bottom-section">
-                    <div class="memberlist">
-                        <span class="member-name">Membre du groupe</span>
+                <div class="right-column-side-bottom-section" id="membersList">
+                    <div class="memberlist" data-id="1" onclick="showMemberInfo(this)">
+                        <span class="member-name">Membre 1</span>
                     </div>
-                    <div class="memberlist">
-                        <span class="member-name">Membre du groupe</span>
+                    <div class="memberlist" data-id="2" onclick="showMemberInfo(this)">
+                        <span class="member-name">Membre 2</span>
                     </div>
-                    <div class="memberlist">
-                        <span class="member-name">Membre du groupe</span>
+                    <div class="memberlist" data-id="3" onclick="showMemberInfo(this)">
+                        <span class="member-name">Membre 3</span>
                     </div>
-                    <div class="memberlist">
-                        <span class="member-name">Membre du groupe</span>
+                    <div class="memberlist" data-id="4" onclick="showMemberInfo(this)">
+                        <span class="member-name">Membre 4</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+<script src="../assets/javascript/home.js"></script>
 </body>
 
 </html>

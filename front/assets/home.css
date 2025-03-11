@@ -164,7 +164,6 @@ header {
     font-size: 1rem;
 }
 
-
 .middle-bar {
     height: 15%;
     display: flex;
@@ -199,7 +198,6 @@ header {
     transform: rotate(360deg);
     transition: transform 0.5s ease;
 }
-
 
 .icon {
     width: 36px;  /* Ajuste la taille de l'icône */
@@ -273,7 +271,6 @@ header {
 .track-options-icon {
     color: white;
     font-size: 0.9rem;
-
 }
 
 .track-options-icon {
@@ -281,7 +278,7 @@ header {
     height: 25px;
 }
 
-.column-side {
+.left-column-side {
     flex: 0 0 20%;
     padding: 2rem;
     background: rgba(9, 21, 30, 0.8);
@@ -303,8 +300,6 @@ header {
     width: 100%;
     display: flex;
     flex-direction: column;
-
-
 }
 
 .column-side-top-section h2 {
@@ -324,6 +319,19 @@ header {
     font-weight: bold;
 }
 
+.right-column-side {
+    flex: 0 0 20%;
+    padding: 2rem;
+    background: rgba(9, 21, 30, 0.8);
+    margin: 0 0.5rem;
+    border-radius: 30px;
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
 .right-column-side-bottom-section {
     min-height: 85%;
     width: 100%;
@@ -336,8 +344,35 @@ header {
     font-size: 20px;
     color: white;
     margin: 15px;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    transition: background 0.3s ease;
 }
 
+.memberlist:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.back-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #1ed7be;
+    color: #09151e;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.back-btn:hover {
+    transform: scale(1.05);
+    background: #17b899;
+}
 
 .right-column-side-top-section  {
     width: 100%;
