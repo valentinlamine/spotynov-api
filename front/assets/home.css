@@ -177,17 +177,27 @@ header {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px; /* Espace entre l'icône et le texte */
+    gap: 10px;
     background: #1ED7BE;
-    padding: 15px 25px; /* Ajuste la taille automatiquement */
-    min-width: 150px; /* Empêche le bouton d'être trop petit */
+    padding: 10px 25px;
     border-radius: 30px;
     font-size: 1.3rem;
     font-weight: bold;
     text-align: center;
     cursor: pointer;
     border: none;
-    white-space: nowrap; /* Évite le retour à la ligne */
+    white-space: nowrap;
+    transition: transform 0.3s ease, background 0.3s ease; /* Transition sur l'échelle et la couleur */
+}
+
+.button:hover {
+    transform: scale(1.05); /* Augmente légèrement la taille du bouton */
+    background: #17b899; /* Changement de couleur de fond au survol */
+}
+
+.button:hover .icon {
+    transform: rotate(360deg);
+    transition: transform 0.5s ease;
 }
 
 
