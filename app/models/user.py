@@ -15,6 +15,7 @@ class User(BaseModel):
     password: str
     groupName: str = None
     spotifyToken: str = None
+    likedPlaylist: list = []
 
 
 class LikedSongClass(BaseModel):

@@ -1,9 +1,19 @@
 {
     "groups": [
         {
-            "name": "name",
-            "admin": -1,
-            "members": []
+            "name": "les pas nez",
+            "admin": 4,
+            "members": [
+                2,
+                4
+            ]
+        },
+        {
+            "name": "les pas nez2",
+            "admin": 3,
+            "members": [
+                3
+            ]
         }
     ]
 }

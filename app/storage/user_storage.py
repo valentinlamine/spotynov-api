@@ -71,6 +71,14 @@ class UserStorage:
                 return True
         return False
 
+    def set_liked_playlist(self, username: str, playlist: list):
+        for user in self.data["users"]:
+            if user["username"] == username:
+                user["likedPlaylist"] = playlist
+                self.save_data()
+                return True
+        return False
+
 
 
 

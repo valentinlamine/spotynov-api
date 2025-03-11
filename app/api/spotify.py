@@ -5,6 +5,7 @@ from app.models.spotify import SpotifyTokenRequest
 from app.models.user import LikedSongClass
 from app.services.spotify_service import SpotifyService
 from app.services.auth_service import AuthService
+from app.storage.user_storage import UserStorage
 
 router = APIRouter()
 
@@ -99,6 +100,10 @@ async def get_last_liked_songs(
             raise HTTPException(status_code=401, detail=error_message)
 
         liked_songs = SpotifyService.get_last_liked_songs(spotify_token, username.limit)
+
+        # Stocke les morceaux like dans la base de donnée de l'utilisateur
+        storage = UserStorage()
+        storage.set_liked_playlist(username.username, liked_songs)
 
         return {"liked_songs": liked_songs}
     except Exception as e:

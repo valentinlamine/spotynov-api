@@ -82,8 +82,8 @@ class SpotifyService:
 
         return response.json()
 
-    @classmethod
-    def get_last_liked_songs(cls, spotify_token, limit=10):
+    @staticmethod
+    def get_last_liked_songs(spotify_token, limit=10):
         # Récupère les 10 derniers morceaux aimés par l'utilisateur
         headers = {"Authorization": f"Bearer {spotify_token}"}
         response = requests.get(f"https://api.spotify.com/v1/me/tracks?limit={limit}", headers=headers)
@@ -92,3 +92,16 @@ class SpotifyService:
             raise Exception("Erreur lors de la récupération des morceaux aimés")
 
         return response.json()["items"]
+
+    @staticmethod
+    def get_personality(spotify_token, self):
+        likes = self.get_last_liked_songs(spotify_token)
+        if not likes:
+            return None
+        # Récupère les derniers morceaux aimés par l'utilisateur
+        personality = requests.get("https://api.spotify.com/v1/audio-features?ids={track_ids}")
+        # Utilisation de l'endpoint spotify pour déduire la personalité
+        return personality.json()
+
+    
+

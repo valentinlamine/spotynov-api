@@ -28,11 +28,11 @@
                     <label for="password">Mot de passe</label>
                     <div class="password-wrapper">
                         <input type="password" id="password" placeholder="Votre mot de passe">
-                        <span class="eye-icon" onclick="togglePasswordVisibility()"></span>
+                        <img src="/assets/icons/EyeSlash.svg" alt="Synchroniser" class="eye-icon" onclick="togglePasswordVisibility(this)">
                     </div>
                 </div>
 
-                <button id="login-btn" onclick="signIn()">Se connecter</button>
+                <button id="login-btn">Se connecter</button>
 
                 <div class="user-options">
                     <div class="line-separator"></div>
@@ -42,6 +42,6 @@
         </div>
     </div>
 </div>
-<script src="../assets/javascript/login.js"></script>
+<script src="../assets/javascript/auth.js"></script>
 </body>
 </html>

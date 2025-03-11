@@ -112,3 +112,13 @@ class AuthService:
             return None
 
         return user["spotifyToken"]
+
+    @staticmethod
+    def get_user_id(username: str):
+        storage = UserStorage()
+        user = storage.get_user_by_name(username)
+
+        if not user:
+            return None
+
+        return user["id"]
