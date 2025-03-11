@@ -111,16 +111,22 @@ async def get_last_liked_songs(
 
 
 @router.get("/analyze-tracks")
-async def analyze_tracks(token: str = Depends(oauth2_scheme)):
+async def analyze_tracks(
+        user: str,
+        token: str = Depends(oauth2_scheme)):
     # Vérifier la validité du token utilisateur via AuthService
     username, error_message = AuthService.verify_token(token)
 
     if username is None:
         raise HTTPException(status_code=401, detail=error_message)
 
+    # vérifier si l'utilisateur existe
+    if AuthService.get_user_id(user) is None:
+        raise HTTPException(status_code=401, detail="Utilisateur non trouvé")
+
     try:
         # Utiliser le token Spotify pour récupérer les morceaux aimés
-        spotify_token = AuthService.get_spotify_token(username)
+        spotify_token = AuthService.get_spotify_token(user)
         if spotify_token is None:
             raise HTTPException(status_code=401, detail="Erreur lors de la récupération du token Spotify")
 
