@@ -101,17 +101,9 @@ async function checkAuthOnHome() {
 
 
 function togglePasswordVisibility(element) {
-    const passwordField = document.getElementById('password');
+    const passwordField = element.previousElementSibling; // Trouve l'input avant l'icône
     const isPasswordVisible = passwordField.type === 'password';
 
     passwordField.type = isPasswordVisible ? 'text' : 'password';
     element.src = isPasswordVisible ? '/assets/icons/Eye.svg' : '/assets/icons/EyeSlash.svg';
-}
-
-function toggleConfirmPasswordVisibility(element) {
-    const passwordField = document.getElementById('confirmPassword');
-    const isConfirmPasswordVisible = passwordField.type === 'password';
-
-    passwordField.type = isConfirmPasswordVisible ? 'text' : 'password';
-    element.src = isConfirmPasswordVisible ? '/assets/icons/Eye.svg' : '/assets/icons/EyeSlash.svg';
 }

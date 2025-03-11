@@ -94,7 +94,6 @@ h2 {
 }
 
 .input-group input {
-    margin-top: 0.5rem;
     font-weight: 300;
     color: #ecfefe;
     width: 100%;
@@ -104,6 +103,10 @@ h2 {
     border-radius: 8px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     outline: none;
+}
+
+.password-wrapper {
+    position: relative;
 }
 
 .eye-icon {
