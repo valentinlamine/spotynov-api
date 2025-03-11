@@ -8,7 +8,9 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: url('background/rectangle.png') center/cover;
+    background-image: url('background/rectangle.png');
+    background-repeat: no-repeat;
+    background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;

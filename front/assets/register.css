@@ -10,6 +10,8 @@ body {
 
 .container {
   background-image: url("background/Rectangle-5.png");
+  background-repeat: no-repeat;
+  background-size: cover;
   min-height: 100vh;
   background-size: cover;
   background-position: center;
