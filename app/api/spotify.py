@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 
 from app.models.spotify import SpotifyTokenRequest
-from app.models.user import LikedSongClass
+from app.models.user import LikedSongClass, UserNameClass
 from app.services.spotify_service import SpotifyService
 from app.services.auth_service import AuthService
 from app.storage.user_storage import UserStorage
@@ -112,7 +112,7 @@ async def get_last_liked_songs(
 
 @router.get("/analyze-tracks")
 async def analyze_tracks(
-        user: str,
+        user: UserNameClass,
         token: str = Depends(oauth2_scheme)):
     # Vérifier la validité du token utilisateur via AuthService
     username, error_message = AuthService.verify_token(token)
@@ -121,17 +121,61 @@ async def analyze_tracks(
         raise HTTPException(status_code=401, detail=error_message)
 
     # vérifier si l'utilisateur existe
-    if AuthService.get_user_id(user) is None:
+    if AuthService.get_user_id(user.user) is None:
         raise HTTPException(status_code=401, detail="Utilisateur non trouvé")
 
     try:
         # Utiliser le token Spotify pour récupérer les morceaux aimés
-        spotify_token = AuthService.get_spotify_token(user)
+        spotify_token = AuthService.get_spotify_token(user.user)
         if spotify_token is None:
             raise HTTPException(status_code=401, detail="Erreur lors de la récupération du token Spotify")
 
         personality = SpotifyService.get_personality(spotify_token)
 
         return personality
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/create-playlist-from-likes")
+async def create_playlist_from_likes(
+        user: UserNameClass,  # Utilisateur cible pour récupérer les morceaux likés
+        token: str = Depends(oauth2_scheme)):
+    # Vérifier la validité du token utilisateur via AuthService
+    connected_user_username, error_message = AuthService.verify_token(token)
+
+    if connected_user_username is None:
+        raise HTTPException(status_code=401, detail=error_message)
+
+    if AuthService.get_user_id(user.user) is None:
+        raise HTTPException(status_code=401, detail="Utilisateur cible non trouvé")
+
+    try:
+        # Récupérer le token Spotify de l'utilisateur connecté
+        user_spotify_token = AuthService.get_spotify_token(connected_user_username)
+        if user_spotify_token is None:
+            raise HTTPException(status_code=401, detail="Erreur lors de la récupération du token Spotify")
+
+        # Récupérer le token Spotify de l'utilisateur cible (l'autre utilisateur)
+        target_spotify_token = AuthService.get_spotify_token(user.user)
+        if target_spotify_token is None:
+            raise HTTPException(status_code=401, detail="Erreur lors de la récupération du token Spotify de l'utilisateur cible")
+
+        # Récupérer les 10 derniers morceaux aimés de l'utilisateur cible
+        liked_songs = SpotifyService.get_last_liked_songs(target_spotify_token, limit=10)
+
+        if not liked_songs:
+            raise HTTPException(status_code=404, detail="Aucun titre liké trouvé pour cet utilisateur.")
+
+        # Créer une playlist pour l'utilisateur connecté
+        playlist_name = f"Playlist des 10 derniers morceaux likés de {user.user}"
+        playlist_id = SpotifyService.create_playlist(user_spotify_token, playlist_name)
+
+        # Ajouter les morceaux à la playlist créée
+        track_ids = [song["track"]["id"] for song in liked_songs]
+        SpotifyService.add_tracks_to_playlist(user_spotify_token, playlist_id, track_ids)
+
+        return {"message": "Playlist créée avec succès", "playlist_id": playlist_id, "tracks_added": len(track_ids)}
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

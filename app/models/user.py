@@ -21,3 +21,7 @@ class User(BaseModel):
 class LikedSongClass(BaseModel):
     username: str
     limit: int = 10
+
+
+class UserNameClass(BaseModel):
+    user: str

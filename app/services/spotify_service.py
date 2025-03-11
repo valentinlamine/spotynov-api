@@ -151,3 +151,48 @@ class SpotifyService:
             "average_popularity": average_popularity,
             "average_duration_seconds": average_duration_seconds
         }
+
+    @staticmethod
+    def create_playlist(user_spotify_token, playlist_name):
+        headers = {"Authorization": f"Bearer {user_spotify_token}"}
+        user_id = SpotifyService.get_spotify_user_id(user_spotify_token)
+
+        if not user_id:
+            raise Exception("Impossible de récupérer l'ID de l'utilisateur Spotify")
+
+        response = requests.post(
+            f"https://api.spotify.com/v1/users/{user_id}/playlists",
+            headers=headers,
+            json={"name": playlist_name, "public": False},
+        )
+
+        if response.status_code != 201:
+            raise Exception("Erreur lors de la création de la playlist")
+
+        return response.json()["id"]
+
+    @staticmethod
+    def get_spotify_user_id(user_spotify_token):
+        headers = {"Authorization": f"Bearer {user_spotify_token}"}
+        response = requests.get("https://api.spotify.com/v1/me", headers=headers)
+
+        if response.status_code != 200:
+            raise Exception("Impossible de récupérer l'ID de l'utilisateur Spotify")
+
+        return response.json()["id"]
+
+    @staticmethod
+    def add_tracks_to_playlist(user_spotify_token, playlist_id, track_ids):
+        headers = {"Authorization": f"Bearer {user_spotify_token}"}
+        response = requests.post(
+            f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks",
+            headers=headers,
+            json={"uris": [f"spotify:track:{track_id}" for track_id in track_ids]},
+        )
+
+        if response.status_code != 201:
+            raise Exception("Erreur lors de l'ajout des morceaux à la playlist")
+
+        return response.json()
+
+

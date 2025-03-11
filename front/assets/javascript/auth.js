@@ -23,7 +23,7 @@ async function signUp(event) {
     };
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/api/auth/signup/", {
+        const response = await fetch("http://localhost:8000/api/auth/signup/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userData),
@@ -45,11 +45,11 @@ async function signUp(event) {
 async function signIn(event, userData = null) {
     if (event) event.preventDefault();
 
-    const pseudo = userData ? userData.username : document.getElementById("pseudo").value;
-    const password = userData ? userData.password : document.getElementById("password").value;
-
+    const pseudo = document.getElementById("pseudo").value;
+    const password = document.getElementById("password").value;
+    console.log(JSON.stringify({ username: pseudo, password: password }))
     try {
-        const response = await fetch('http://127.0.0.1:8000/api/auth/login/', {
+        const response = await fetch('http://localhost:8000/api/auth/login/', {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username: pseudo, password: password }),
@@ -59,18 +59,16 @@ async function signIn(event, userData = null) {
 
         if (!response.ok) throw new Error(result.detail || "Identifiants incorrects");
 
-        fetch("http://127.0.0.1:8000/home", {
+        localStorage.setItem("token", result.token);
+
+        const response2 = await fetch("http://localhost:8000/home", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${result.token}`
             }
         })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error("Erreur:", error));
 
-        localStorage.setItem("token", result.token);
-        window.location.href = "home"; // Redirection après connexion
+        window.location.href = "home";
     } catch (error) {
         alert(error.message);
     }

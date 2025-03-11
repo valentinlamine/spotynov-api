@@ -72,7 +72,7 @@ class AuthService:
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             username: str = payload.get("sub")
-            if username is None:
+            if username is None or username == "":
                 return None
             return username, "Token valide"
         except jwt.ExpiredSignatureError:
