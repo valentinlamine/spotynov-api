@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 
 from app.models.spotify import SpotifyTokenRequest
+from app.models.user import LikedSongClass
 from app.services.spotify_service import SpotifyService
 from app.services.auth_service import AuthService
 
@@ -79,3 +80,27 @@ async def current_playback(token: str = Depends(oauth2_scheme)):
         return {"track": playback}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/get-last-liked-songs")
+async def get_last_liked_songs(
+        username: LikedSongClass,
+        token: str = Depends(oauth2_scheme)):
+    # Vérifier la validité du token utilisateur via AuthService
+    username.username, error_message = AuthService.verify_token(token)
+
+    if username.username is None:
+        raise HTTPException(status_code=401, detail=error_message)
+
+    try:
+        # Utiliser le token Spotify pour récupérer les derniers morceaux aimés
+        spotify_token = AuthService.get_spotify_token(username.username)
+        if spotify_token is None:
+            raise HTTPException(status_code=401, detail=error_message)
+
+        liked_songs = SpotifyService.get_last_liked_songs(spotify_token, username.limit)
+
+        return {"liked_songs": liked_songs}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+

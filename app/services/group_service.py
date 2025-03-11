@@ -110,7 +110,6 @@ class GroupService:
         else:
             grp = storage_group.get_group_by_name(group_name)
 
-
         if user_id in grp.members:
             return False
 
@@ -120,6 +119,3 @@ class GroupService:
         storage_group.save_data()
 
         return True
-
-
-

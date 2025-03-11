@@ -15,3 +15,8 @@ class User(BaseModel):
     password: str
     groupName: str = None
     spotifyToken: str = None
+
+
+class LikedSongClass(BaseModel):
+    username: str
+    limit: int = 10

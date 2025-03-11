@@ -74,7 +74,21 @@ class SpotifyService:
         headers = {"Authorization": f"Bearer {spotify_token}"}
         response = requests.get("https://api.spotify.com/v1/me/player/currently-playing", headers=headers)
 
+        if response.status_code == 204:
+            return None
+
         if response.status_code != 200:
             raise Exception("Erreur lors de la récupération du morceau en cours de lecture")
 
         return response.json()
+
+    @classmethod
+    def get_last_liked_songs(cls, spotify_token, limit=10):
+        # Récupère les 10 derniers morceaux aimés par l'utilisateur
+        headers = {"Authorization": f"Bearer {spotify_token}"}
+        response = requests.get(f"https://api.spotify.com/v1/me/tracks?limit={limit}", headers=headers)
+
+        if response.status_code != 200:
+            raise Exception("Erreur lors de la récupération des morceaux aimés")
+
+        return response.json()["items"]

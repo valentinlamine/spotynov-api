@@ -12,7 +12,7 @@
             "username": "valouz2",
             "password": "$2b$12$4ug9Ix4Bs.vLCpjx9WIQd.kW585QPjN0S.jChmgn5AfNi031Gv8CO",
             "groupName": null,
-            "spotifyToken": "BQCN-cmBJwC72-E2jd8WCQQhPaYYvIHog0zEojfi65hdVhioUMP20AC_kB7fFQUvJK_Ko7ocm9TrbOqpXpcYvcaYqZb6N9-oBgseGPaCTTJj0x-0z9r4Jc3ebBn2fZpNHTkzBoVZX6Q52vikPTlb6CmuGWqydqK7ZlV1WzD8hjTcptzOeIsykmslJnRd9_eUWIl5VEUIcgUUQZHDYX4jty92cDSCuhfQPY2Pg_BBN8B9S8PNn9Ta97cUdnAJvcvVW9ulqtn_WVUhbqoCNr4QS18W3fI48Gusot5126FQG1l-u_PbdPhaGDQHFOgDTw41jP27H7mF_w4mUTU43z2kaiWbXwxRxLs"
+            "spotifyToken": "BQCwtNNM6jGcE-KOY3z4evcXlrt20goBPGA5t2VC-azIY32XcQgRofK-0-W_FgOKb3EHvIwJWdbNR0yAiHrASIiF32zT0fp8-xMV4OKj1klQJcI_XrL6Yx2Z3NFlGbsOkp_gZtkEEUicLy-AyT60xRRjVTMSuOV9t8GlVGAs_2akYIL8L1BxvaqwJqzb2n3vRReYiqdbGi1UaHuUhwwNnM9j4QSEhb22DlBqiewYg5tphVGsQV8i5IJ4ur5dOtXER3g7W3DiC_a7x__T7S8JYWERijjbT8-tOEdl_e2KOEizAiL8FLOPZcu2mumYMyj74xU__5ck3Bciaoq4jjJO4AXCeMAWerk"
         },
         {
             "id": 4,
@@ -20,7 +20,49 @@
             "password": "$2b$12$ePPBiPi.fHaFTk1iDnFdZOmDA2JaK8I8MQJ4o.8pvNqoe7wE.cEJq",
             "groupName": null,
             "spotifyToken": null
+        },
+        {
+            "id": 5,
+            "username": "valouz3",
+            "password": "$2b$12$rKzGwRIykWAvvu9UDxGe9u3Khs6/GXLDPT1Nv7ZUo3btpQFhcP.tS",
+            "groupName": null,
+            "spotifyToken": null
+        },
+        {
+            "id": 6,
+            "username": "a",
+            "password": "$2b$12$R97cC0a3DaDqhgdRujxjCuvT6w7GTFf4kcOPuKqer89ToJfn.J432",
+            "groupName": null,
+            "spotifyToken": null
+        },
+        {
+            "id": 7,
+            "username": "aa",
+            "password": "$2b$12$OMfHjqYopLGMSsAWxbWDU.FxsIPGrpTh2pvlHqU4.Wfy3Dc0TuHZW",
+            "groupName": null,
+            "spotifyToken": null
+        },
+        {
+            "id": 8,
+            "username": "azee",
+            "password": "$2b$12$x8RFPie8szVhG2rHBjf8IuGjLvj4ri2VDRPJYwKiNHyU7POcLHSUi",
+            "groupName": null,
+            "spotifyToken": null
+        },
+        {
+            "id": 9,
+            "username": "azeee",
+            "password": "$2b$12$oHBWFZIoM54OHk/uu4d9o.AeL.m.GPPWLL69Xcn27mN4vsnz.5u8C",
+            "groupName": null,
+            "spotifyToken": null
+        },
+        {
+            "id": 10,
+            "username": "aphorism",
+            "password": "$2b$12$zQAXAJKEY.GFXj2AQxpzRO8UgZ2D04N89EdDx4fzDnkcFfWix.eiW",
+            "groupName": null,
+            "spotifyToken": null
         }
     ],
-    "lastUserId": 4
+    "lastUserId": 10
 }
