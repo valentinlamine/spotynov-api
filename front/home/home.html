@@ -6,6 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="../assets/home.css"/>
+    <link rel="stylesheet" href="../assets/responsive.css"/>
     <title>Home</title>
 </head>
 <body>
@@ -31,7 +32,7 @@
             </div>
         </header>
         <div class="content">
-            <div class="left-column-side">
+            <div class="left-column-side column" id="left-column-side">
                 <div class="column-side-top-section">
                     <h2>Mon Groupe</h2>
                     <div class="track">
@@ -70,7 +71,7 @@
 
                 </div>
             </div>
-            <div class="column-middle">
+            <div class="column-middle column" id="column-middle">
                 <div class="middle-section top-section">
                     <img src="../assets/background/rectangle-1.png" alt="Cover" class="image">
 
@@ -125,7 +126,7 @@
                     </div>
                 </div>
             </div>
-            <div class="right-column-side">
+            <div class="right-column-side column" id="right-column-side">
                 <div class="right-column-side-top-section">
                     <h2>Membre(s) du groupe</h2>
                 </div>
@@ -143,6 +144,12 @@
                         <span class="member-name">Membre 4</span>
                     </div>
                 </div>
+            </div>
+            <div class="mobile-nav">
+                <button onclick="showColumn('left-column-side')"><img src="../assets/icons/UsersThree.svg" alt="group" height="48" width="48"></button>
+                <button onclick="showColumn('column-middle')"><img src="../assets/icons/music.svg" alt="music"></button>
+                <button onclick="showColumn('right-column-side')"><img src="../assets/icons/member.svg" alt="member" height="48" width="48"></button>
+                <button onclick="logout()"><img src="../assets/icons/Deconnexion.svg" alt="Déconnexion" height="48" width="48"></button>
             </div>
         </div>
     </div>
