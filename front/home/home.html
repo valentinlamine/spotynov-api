@@ -10,25 +10,14 @@
     <title>Home</title>
 </head>
 <body>
-    <div class="container">
+    <div class=" container homeBody">
         <header>
-            <div class="header-side">
-
-            </div>
-            <div class="header-middle">
-                <div class="search-container">
-                    <!-- Conteneur pour la barre de recherche -->
-                    <div class="search-box">
-                        <img src="../assets/icons/MagnifyingGlass.svg" alt="Recherche" class="search-icon">
-                        <input type="text" placeholder="Rechercher un groupe" class="search-bar">
-                    </div>
-                </div>
-            </div>
-            <div class="header-side">
-                <div class="logout-container">
-                    <img src="../assets/icons/Deconnexion.svg" alt="Se déconnecter" class="logout-icon" height="25" width="25">
-                    <span class="logout-text">Se déconnecter</span>
-                </div>
+            <button class="refresbutton">
+                Spotify Refresh
+            </button>
+            <div class="logout-container">
+                <img src="../assets/icons/Deconnexion.svg" alt="Se déconnecter" class="logout-icon" height="25" width="25">
+                <span class="logout-text">Log Out</span>
             </div>
         </header>
         <div class="content">
@@ -46,29 +35,28 @@
                     <h2>Autres Groupes</h2>
                     <div class="track">
                         <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
-                        <span class="track-name">Nom du groupe</span>
+                        <a class="track-name">Nom du groupe</a>
                     </div>
                     <div class="track">
                         <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
-                        <span class="track-name">Nom du groupe</span>
+                        <a class="track-name">Nom du groupe</a>
                     </div>
                     <div class="track">
                         <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
-                        <span class="track-name">Nom du groupe</span>
+                        <a class="track-name">Nom du groupe</a>
                     </div>
                     <div class="track">
                         <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
-                        <span class="track-name">Nom du groupe</span>
+                        <a class="track-name">Nom du groupe</a>
                     </div>
                     <div class="track">
                         <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
-                        <span class="track-name">Nom du groupe</span>
+                        <a class="track-name">Nom du groupe</a>
                     </div>
                     <div class="track">
                         <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
-                        <span class="track-name">Nom du groupe</span>
+                        <a class="track-name">Nom du groupe</a>
                     </div>
-
                 </div>
             </div>
             <div class="column-middle column" id="column-middle">
@@ -92,11 +80,14 @@
                         <img src="../assets/icons/ArrowsClockwise.png" alt="Synchroniser" class="icon">
                         Synchroniser
                     </button>
+                    <button class="refresbutton-responsive">
+                        Spotify Refresh
+                    </button>
                 </div>
                 <div class="middle-section bottom-section">
                     <div class="playlist">
                         <!-- Ligne spéciale (Header) -->
-                        <div class="track header-track">
+                        <div class="track-info header-track">
                             <span class="track-number">#</span>
                             <span class="track-img-placeholder"></span> <!-- Espace vide pour aligner -->
                             <span class="track-name">Titre</span>

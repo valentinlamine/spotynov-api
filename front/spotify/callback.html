@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Callback</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .loading {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Connexion à Spotify réussie</h1>
+    <p>Merci de patienter pendant que nous vous connectons...</p>
+
+    <div class="loading">Chargement...</div>
+
+    <script>
+        // Fonction pour récupérer le paramètre `spotify_token` dans l'URL
+        function getSpotifyTokenFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('access_token');
+        }
+
+        // Fonction pour envoyer la requête /api/spotify/link
+        async function linkSpotifyAccount() {
+            const spotifyToken = getSpotifyTokenFromUrl();
+            const appToken = localStorage.getItem('access_token');  // Récupère le token d'application depuis le localStorage
+
+            if (!spotifyToken || !appToken) {
+                alert("Token manquant");
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/spotify/link', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${appToken}`,  // Authentification avec le token d'application
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        spotify_token: spotifyToken,  // On envoie le token Spotify en JSON
+                    }),
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert("Compte Spotify lié avec succès !");
+                    window.location.href = '/home';  // Redirection vers la page d'accueil après succès
+                } else {
+                    const error = await response.json();
+                    alert("Erreur lors de la liaison du compte : " + error.detail);
+                }
+            } catch (error) {
+                alert("Erreur réseau : " + error.message);
+            }
+        }
+
+        // Appel de la fonction pour lier le compte Spotify après quelques secondes
+        window.onload = function () {
+            setTimeout(linkSpotifyAccount, 2000);  // Attente de 2 secondes avant de tenter la liaison
+        };
+    </script>
+</body>
+</html>

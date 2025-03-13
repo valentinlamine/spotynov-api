@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
+from starlette.responses import RedirectResponse
 
 from app.models.spotify import SpotifyTokenRequest
 from app.models.user import LikedSongClass, UserNameClass
@@ -23,6 +24,7 @@ async def connect_spotify(token: str = Depends(oauth2_scheme)):
 
     # Récupérer l'URL d'autorisation depuis le service Spotify
     auth_url = SpotifyService.get_authorization_url()
+    print(auth_url)
 
     return {"auth_url": auth_url}
 
@@ -31,10 +33,18 @@ async def connect_spotify(token: str = Depends(oauth2_scheme)):
 @router.get("/callback")
 async def spotify_callback(code: str):
     try:
+        # Récupérer l'URL de la requête pour obtenir le domaine et le port
+        base_url = "http://localhost:8000"  # Remplace par la logique pour obtenir dynamiquement l'URL de base si nécessaire
+
         # Échanger le code d'autorisation contre un token d'accès
         access_token = SpotifyService.exchange_code_for_token(code)
 
-        return {"access_token": access_token}
+        # Construire l'URL de redirection en ajoutant le token à l'URL
+        redirect_url = f"{base_url}/callback?access_token={access_token}"
+
+        # Rediriger l'utilisateur vers l'URL de redirection
+        return RedirectResponse(url=redirect_url)
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

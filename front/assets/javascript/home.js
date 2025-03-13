@@ -1,13 +1,109 @@
-function showMemberInfo(element) {
+// Exécute la vérification dès que la page se charge
+document.addEventListener("DOMContentLoaded", checkAuth);
+
+// Charger les groupes au chargement de la page
+document.addEventListener("DOMContentLoaded", loadGroups);
+
+document.addEventListener("DOMContentLoaded", () => {
+    const refreshBtn = document.querySelector(".refresbutton");
+    if (refreshBtn) refreshBtn.addEventListener("click", spotifyConnect);
+});
+
+async function spotifyConnect() {
+    if (event) event.preventDefault();
+
+    const response = await fetch("http://localhost:8000/api/spotify/connect/", {
+        method: "GET",
+        headers: { "Authorization": `Bearer ${localStorage.getItem("access_token")}` },
+    });
+
+    const result = await response.json();
+
+    let access;
+    if (response.ok) {
+        access = window.location.href = result.auth_url;
+    } else console.log("erreur")
+
+    console.log(access);
+
+
+
+}
+
+async function loadGroups() {
+    try {
+        const response = await fetch("http://localhost:8000/api/group/list", {
+            method: "GET",
+            headers: { "Authorization": `Bearer ${localStorage.getItem("access_token")}` },
+        });
+
+        if (!response.ok) {
+            throw new Error("Erreur lors de la récupération des groupes");
+        }
+
+        const groups = await response.json().groups;
+        console.log("Groupes reçus :", groups);
+
+        const currentGroupContainer = document.querySelector(".column-side-top-section .track");
+        const otherGroupsContainer = document.querySelector(".column-side-bottom-section");
+
+        currentGroupContainer.innerHTML = "";
+        otherGroupsContainer.innerHTML = "<h2>Autres Groupes</h2>";
+
+        let currentGroupFound = false;
+
+        groups.forEach(group => {
+            // Vérifier si l'utilisateur connecté est membre de ce groupe
+            const isCurrentUserInGroup = group.members.includes(parseInt(userId));
+
+            const groupElement = document.createElement("div");
+            groupElement.classList.add("track");
+            groupElement.innerHTML = `
+                <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
+                <a href="group.html?id=${group.name}" class="track-name">${group.name}</a>
+            `;
+
+            if (isCurrentUserInGroup && !currentGroupFound) {
+                // Si l'utilisateur est membre du groupe, et que c'est le premier trouvé
+                currentGroupContainer.appendChild(groupElement);
+                currentGroupFound = true;
+            } else {
+                // Sinon, c'est un "autre groupe"
+                otherGroupsContainer.appendChild(groupElement);
+            }
+        });
+
+        // Si aucun groupe principal n'a été trouvé, afficher un message
+        if (!currentGroupFound) {
+            currentGroupContainer.innerHTML = "<span>Aucun groupe principal</span>";
+        }
+
+    } catch (error) {
+        console.error("Erreur :", error.message);
+    }
+}
+
+async function showMemberInfo(element) {
     const memberId = element.getAttribute("data-id");
 
+    const response = await fetch('http://localhost:8000/api/groups/members', {
+        method: 'GET',
+        headers: { "Authorization": `Bearer ${localStorage.getItem("access_token")}` },
+    });
+
+    const result = await response.json();
+
     // Simuler des données pour chaque membre
-    const membersData = {
+    /*const membersData = {
         1: { name: "Membre 1", role: "Admin", joined: "Janvier 2024" },
         2: { name: "Membre 2", role: "Modérateur", joined: "Mars 2023" },
         3: { name: "Membre 3", role: "Utilisateur", joined: "Juin 2022" },
         4: { name: "Membre 4", role: "VIP", joined: "Décembre 2021" }
-    };
+    };*/
+
+    let membersData;
+    membersData = result;
+    console.log(membersData)
 
     // Récupérer les infos du membre sélectionné
     const memberInfo = membersData[memberId];
@@ -50,10 +146,12 @@ function reloadMemberList() {
 
 
 async function checkAuth() {
+    const body = document.querySelector(".homeBody");
     const token = localStorage.getItem("access_token");
 
     if (!token) {
         console.warn("Aucun token trouvé, redirection vers la page de connexion...");
+        body.style.display = "none";
         window.location.href = "http://localhost:8000/login";  // Redirection vers la page de connexion
         return;
     }
@@ -65,22 +163,20 @@ async function checkAuth() {
         });
 
         if (!response.ok) {
+            body.style.display = "none";
             throw new Error(response.detail || "Erreur d'authentification");
+        } else {
+
+            const data = await response.json();
+            console.log("Utilisateur authentifié :", data.username);
+            body.style.display = "flex";
         }
-
-        const data = await response.json();
-        console.log("Utilisateur authentifié :", data.username);
-        // Ici, tu peux mettre à jour l'interface utilisateur avec le username
-
     } catch (error) {
         console.error("Erreur d'authentification :", error.message);
         localStorage.removeItem("access_token");  // Supprime le token invalide
         window.location.href = "http://localhost:8000/login";  // Redirection vers la connexion
     }
 }
-
-// Exécute la vérification dès que la page se charge
-document.addEventListener("DOMContentLoaded", checkAuth);
 
 function showColumn(columnId) {
     // Cache toutes les colonnes
@@ -132,3 +228,5 @@ if (window.innerWidth > 1080) {
     // Sélectionne la colonne de musique par défaut en mode mobile
     showColumn('column-middle');
 }
+
+

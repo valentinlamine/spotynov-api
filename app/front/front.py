@@ -28,6 +28,6 @@ async def home_page():
     return FileResponse(os.path.join("front", 'home', 'home.html'))
 
 
-@router.get("/spotify")
-async def spotify():
-    return FileResponse(os.path.join("front", "spotify", "spotify.html"))
+@router.get("/callback")
+async def callback():
+    return FileResponse(os.path.join("front", "spotify", "callback.html"))
