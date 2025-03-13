@@ -29,14 +29,8 @@ async def login(user: SimplifiedUser):
 
 @router.get("/verify-token")
 async def verify_token(token: str = Depends(oauth2_scheme)):
-    """
-    Vérifie la validité du token JWT et retourne les infos de l'utilisateur.
-    """
-    print("verify token : " + token)
     username, error_message = AuthService.verify_token(token)
-    print(username, error_message)
 
     if username is None:
-        print("no user")
         raise HTTPException(status_code=401, detail=error_message)
     return {"username": username, "message": error_message}

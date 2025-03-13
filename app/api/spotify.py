@@ -228,9 +228,6 @@ async def synchronize_playback(
                 # Démarrer la lecture sur l'appareil actif du membre à la même position que l'administrateur
                 SpotifyService.start_playback(user_spotify_token, playback['item']['id'], playback['progress_ms'])
 
-            else:
-                print(f"Le membre {user} n'a pas de token Spotify enregistré.")
-
         return {"message": "La musique a été synchronisée sur tous les appareils des membres du groupe."}
 
     except Exception as e:
