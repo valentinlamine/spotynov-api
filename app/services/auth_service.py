@@ -71,12 +71,11 @@ class AuthService:
     def verify_token(token: str):
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-            username: str = payload.get("sub")
-            if username is None or username == "":
-                return None
-            return username, "Token valide"
+            return payload.get("sub"), "Token valide"
         except jwt.ExpiredSignatureError:
             return None, "Token expiré"
+        except jwt.InvalidTokenError:
+            return None, "Token invalide"
 
     @staticmethod
     def set_spotify_token(username: str, spotify_token: str):

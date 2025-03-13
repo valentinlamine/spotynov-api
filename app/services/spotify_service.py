@@ -195,4 +195,35 @@ class SpotifyService:
 
         return response.json()
 
+    @classmethod
+    def start_playback(cls, user_spotify_token, track_id, playback_ms=0):
+        headers = {"Authorization": f"Bearer {user_spotify_token}"}
+
+        # Corps de la requête avec seulement track_id et position_ms
+        body = {
+            "uris": [f"spotify:track:{track_id}"],
+            "position_ms": playback_ms
+        }
+
+        # Faire la requête PUT pour démarrer la lecture
+        response = requests.put(
+            "https://api.spotify.com/v1/me/player/play",
+            headers=headers,
+            json=body
+        )
+
+        # Vérification du statut de la réponse
+        if response.status_code == 204:
+            # Lecture démarrée avec succès
+            return {"success": True}
+        elif response.status_code == 401:
+            raise Exception("Non autorisé : Vérifiez votre token Spotify")
+        elif response.status_code == 403:
+            raise Exception("Accès refusé : L'API n'a pas permis d'effectuer cette action")
+        elif response.status_code == 429:
+            raise Exception("Trop de requêtes envoyées. Veuillez réessayer plus tard.")
+        else:
+            raise Exception(f"Erreur {response.status_code} : {response.text}")
+
+
 

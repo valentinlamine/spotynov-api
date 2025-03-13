@@ -6,6 +6,8 @@ router = APIRouter()
 
 @router.get("/home")
 async def home(username: str = Depends(verify_token)):
+    print("home : ", username)
     if username is None:
         raise HTTPException(status_code=401, detail="Accès non autorisé")
     return {"message": f"Bienvenue {username} sur la page home !"}
+

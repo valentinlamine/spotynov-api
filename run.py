@@ -25,3 +25,8 @@ app.include_router(spotify_router, prefix="/api/spotify")
 app.include_router(front_router, prefix="")
 
 app.mount("/assets", StaticFiles(directory="front/assets"), name="assets")
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="localhost", port=8000)

@@ -42,12 +42,14 @@ async function signUp(event) {
     }
 }
 
+
 async function signIn(event, userData = null) {
     if (event) event.preventDefault();
 
     const pseudo = document.getElementById("pseudo").value;
     const password = document.getElementById("password").value;
-    console.log(JSON.stringify({ username: pseudo, password: password }))
+    console.log(JSON.stringify({ username: pseudo, password: password }));
+
     try {
         const response = await fetch('http://localhost:8000/api/auth/login/', {
             method: 'POST',
@@ -57,20 +59,24 @@ async function signIn(event, userData = null) {
 
         const result = await response.json();
 
-        if (!response.ok) throw new Error(result.detail || "Identifiants incorrects");
+        // Vérifier si la connexion a réussi
+        if (response.ok && result.detail === "Connexion réussie") {
+            // Stocker le token d'accès dans localStorage (ou sessionStorage si vous préférez)
+            localStorage.setItem("access_token", result.access_token);
 
-        localStorage.setItem("token", result.token);
+            const response2 = await fetch('http://localhost:8000/api/auth/verify-token', {
+                method: 'GET',
+                headers: { "Authorization": `Bearer ${result.access_token}` },
+            });
 
-        const response2 = await fetch("http://localhost:8000/home", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${result.token}`
-            }
-        })
-
-        window.location.href = "home";
+            // Rediriger vers la page /home après la connexion
+            window.location.href = "/home";
+        } else {
+            // Afficher un message d'erreur si la connexion échoue
+            alert(result.detail || "Erreur de connexion");
+        }
     } catch (error) {
-        alert(error.message);
+        alert(error.message || "Erreur de connexion. Veuillez réessayer.");
     }
 }
 

@@ -119,3 +119,8 @@ class GroupService:
     def get_user_group_name(user_id: int):
         storage = GroupStorage()
         return storage.get_user_group_name(user_id)
+
+    @classmethod
+    def is_user_admin(cls, user_id, user_group_name):
+        storage = GroupStorage()
+        return storage.is_user_admin(user_id, user_group_name)

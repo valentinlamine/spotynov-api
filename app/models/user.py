@@ -13,7 +13,6 @@ class User(BaseModel):
     id: int
     username: str
     password: str
-    groupName: str = None
     spotifyToken: str = None
     likedPlaylist: list = []
 

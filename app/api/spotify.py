@@ -3,6 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from app.models.spotify import SpotifyTokenRequest
 from app.models.user import LikedSongClass, UserNameClass
+from app.services.group_service import GroupService
 from app.services.spotify_service import SpotifyService
 from app.services.auth_service import AuthService
 from app.storage.user_storage import UserStorage
@@ -176,6 +177,61 @@ async def create_playlist_from_likes(
         SpotifyService.add_tracks_to_playlist(user_spotify_token, playlist_id, track_ids)
 
         return {"message": "Playlist créée avec succès", "playlist_id": playlist_id, "tracks_added": len(track_ids)}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/synchronize")
+async def synchronize_playback(
+        token: str = Depends(oauth2_scheme)):
+    # Vérifier la validité du token utilisateur via AuthService
+    admin_username, error_message = AuthService.verify_token(token)
+
+    if admin_username is None:
+        raise HTTPException(status_code=401, detail=error_message)
+
+    # vérifier si l'utilisateur est dans un groupe
+    user_id = AuthService.get_user_id(admin_username)
+    user_group_name = GroupService.get_user_group_name(user_id)
+    if not user_group_name:
+        raise HTTPException(status_code=401, detail="Vous n'êtes dans aucun groupe.")
+
+    # vérifier si l'utilisateur est l'administrateur du groupe
+    if not GroupService.is_user_admin(user_id, user_group_name):
+        raise HTTPException(status_code=401, detail="Vous n'êtes pas l'administrateur du groupe.")
+
+    # Récupérer tous les utilisateurs du groupe
+    group_users_id = GroupService.get_group_members(user_id)
+    if not group_users_id:
+        raise HTTPException(status_code=404, detail="Aucun membre trouvé dans le groupe.")
+
+    # Récupérer le token Spotify de l'administrateur pour savoir ce qu'il est en train d'écouter
+    admin_spotify_token = AuthService.get_spotify_token(admin_username)
+    if not admin_spotify_token:
+        raise HTTPException(status_code=401,
+                            detail="Erreur lors de la récupération du token Spotify de l'administrateur")
+
+    try:
+        # Récupérer les informations de la lecture en cours de l'administrateur
+        playback = SpotifyService.get_current_playback(admin_spotify_token)
+
+        # Synchroniser la musique sur tous les appareils des membres du groupe
+        for user_id in group_users_id:
+            # récupérer le nom des utilisateurs
+            user = AuthService.get_username_by_id(user_id)
+            if user == admin_username:
+                continue
+            # Récupérer le token Spotify de chaque membre
+            user_spotify_token = AuthService.get_spotify_token(user)
+            if user_spotify_token:
+                # Démarrer la lecture sur l'appareil actif du membre à la même position que l'administrateur
+                SpotifyService.start_playback(user_spotify_token, playback['item']['id'], playback['progress_ms'])
+
+            else:
+                print(f"Le membre {user} n'a pas de token Spotify enregistré.")
+
+        return {"message": "La musique a été synchronisée sur tous les appareils des membres du groupe."}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

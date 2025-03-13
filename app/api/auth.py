@@ -20,9 +20,9 @@ async def signup(user: SimplifiedUser):
 
 @router.post("/login")
 async def login(user: SimplifiedUser):
-    token = AuthService.login(user)
+    token, message = AuthService.login(user)
     if token:
-        return {"token": token}
+        return {"access_token": token, "detail": message}
     else:
         raise HTTPException(status_code=401, detail="Identifiants incorrects")
 
@@ -32,9 +32,11 @@ async def verify_token(token: str = Depends(oauth2_scheme)):
     """
     Vérifie la validité du token JWT et retourne les infos de l'utilisateur.
     """
+    print("verify token : " + token)
     username, error_message = AuthService.verify_token(token)
+    print(username, error_message)
 
     if username is None:
+        print("no user")
         raise HTTPException(status_code=401, detail=error_message)
-
-    return username
+    return {"username": username, "message": error_message}

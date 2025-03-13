@@ -23,14 +23,13 @@ async def create_group(
 
     user_id = AuthService.get_user_id(username)
     user_group = GroupService.get_user_group_name(user_id)
-    print(user_group)
 
     success, message = GroupService.create_group(name.name, user_id)
 
     if success:
         # Supprimer le groupe de l'utilisateur s'il en a déjà un
         if user_group:
-            GroupService.remove_user_from_group(user_id, user_group)
+            GroupService.remove_user_from_group(user_id)
         return {"message": message}
     else:
         raise HTTPException(status_code=400, detail=message)
@@ -96,6 +95,9 @@ async def join_group(
     user_id = AuthService.get_user_id(username)
 
     group_name = GroupService.get_user_group_name(user_id)
+    if group_name == name.name:
+        raise HTTPException(status_code=400, detail="Vous êtes déjà dans ce groupe")
+
     if group_name:
         GroupService.remove_user_from_group(user_id)
 
