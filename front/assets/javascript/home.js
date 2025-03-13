@@ -81,3 +81,54 @@ async function checkAuth() {
 
 // Exécute la vérification dès que la page se charge
 document.addEventListener("DOMContentLoaded", checkAuth);
+
+function showColumn(columnId) {
+    // Cache toutes les colonnes
+    document.querySelectorAll('.column').forEach(column => {
+        column.style.display = 'none';
+    });
+
+    // Affiche la colonne spécifiée
+    document.getElementById(columnId).style.display = 'block';
+
+    // Ajoute la classe "active" au bouton sélectionné
+    document.querySelectorAll('.mobile-nav button').forEach(button => {
+        button.classList.remove('active');
+    });
+    document.querySelector(`.mobile-nav button[onclick="showColumn('${columnId}')"]`).classList.add('active');
+}
+
+function logout() {
+    // Redirige ou effectue une action de déconnexion
+    console.log('Déconnexion');
+}
+
+// Fonction qui s'active lors du redimensionnement de l'écran
+window.addEventListener('resize', function() {
+    if (window.innerWidth > 1080) {
+        // Réaffiche toutes les colonnes en mode desktop
+        document.querySelectorAll('.column').forEach(column => {
+            column.style.display = 'block';
+        });
+        // Cache la navigation mobile
+        document.querySelector('.mobile-nav').style.display = 'none';
+    } else {
+        // Affiche la navigation mobile en mode mobile
+        document.querySelector('.mobile-nav').style.display = 'flex';
+
+        // Sélectionne la colonne de musique par défaut lorsqu'on passe en mode mobile
+        showColumn('column-middle');
+    }
+});
+
+// Vérification initiale au chargement de la page
+if (window.innerWidth > 1080) {
+    document.querySelectorAll('.column').forEach(column => {
+        column.style.display = 'block'; // Affiche toutes les colonnes en mode desktop
+    });
+    document.querySelector('.mobile-nav').style.display = 'none'; // Cache la barre de navigation mobile en desktop
+} else {
+    document.querySelector('.mobile-nav').style.display = 'flex'; // Affiche la navigation mobile en mode mobile
+    // Sélectionne la colonne de musique par défaut en mode mobile
+    showColumn('column-middle');
+}
