@@ -47,3 +47,37 @@ function reloadMemberList() {
         </div>
     `;
 }
+
+
+async function checkAuth() {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+        console.warn("Aucun token trouvé, redirection vers la page de connexion...");
+        window.location.href = "http://localhost:8000/login";  // Redirection vers la page de connexion
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:8000/api/auth/verify-token', {
+            method: 'GET',
+            headers: { "Authorization": `Bearer ${token}` },
+        });
+
+        if (!response.ok) {
+            throw new Error(response.detail || "Erreur d'authentification");
+        }
+
+        const data = await response.json();
+        console.log("Utilisateur authentifié :", data.username);
+        // Ici, tu peux mettre à jour l'interface utilisateur avec le username
+
+    } catch (error) {
+        console.error("Erreur d'authentification :", error.message);
+        localStorage.removeItem("access_token");  // Supprime le token invalide
+        window.location.href = "http://localhost:8000/login";  // Redirection vers la connexion
+    }
+}
+
+// Exécute la vérification dès que la page se charge
+document.addEventListener("DOMContentLoaded", checkAuth);

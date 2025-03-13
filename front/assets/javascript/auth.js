@@ -66,7 +66,7 @@ async function signIn(event, userData = null) {
 
             const response2 = await fetch('http://localhost:8000/api/auth/verify-token', {
                 method: 'GET',
-                headers: { "Authorization": `Bearer ${result.access_token}` },
+                headers: { "Authorization": `Bearer ${localStorage.getItem("access_token")}` },
             });
 
             // Rediriger vers la page /home après la connexion
