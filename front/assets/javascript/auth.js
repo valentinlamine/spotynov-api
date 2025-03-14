@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (loginBtn) loginBtn.addEventListener("click", signIn);
 });
 
+const PORT=8001;
+const FIRST_URI="http://localhost:"+PORT;
+
 async function signUp(event) {
     event.preventDefault();
 
@@ -23,7 +26,7 @@ async function signUp(event) {
     };
 
     try {
-        const response = await fetch("http://localhost:8000/api/auth/signup/", {
+        const response = await fetch(FIRST_URI + "/api/auth/signup/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userData),
@@ -51,7 +54,7 @@ async function signIn(event, userData = null) {
     console.log(JSON.stringify({ username: pseudo, password: password }));
 
     try {
-        const response = await fetch('http://localhost:8000/api/auth/login/', {
+        const response = await fetch(FIRST_URI + '/api/auth/login/', {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username: pseudo, password: password }),
@@ -64,7 +67,7 @@ async function signIn(event, userData = null) {
             // Stocker le token d'accès dans localStorage (ou sessionStorage si vous préférez)
             localStorage.setItem("access_token", result.access_token);
 
-            const response2 = await fetch('http://localhost:8000/api/auth/verify-token', {
+            const response2 = await fetch(FIRST_URI + '/api/auth/verify-token', {
                 method: 'GET',
                 headers: { "Authorization": `Bearer ${localStorage.getItem("access_token")}` },
             });
