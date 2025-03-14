@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (loginBtn) loginBtn.addEventListener("click", signIn);
 });
 
-const PORT=8001;
+const PORT=8000;
 const FIRST_URI="http://localhost:"+PORT;
 
 async function signUp(event) {

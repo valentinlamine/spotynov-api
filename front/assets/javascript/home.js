@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (refreshBtn) refreshBtn.addEventListener("click", spotifyConnect);
 });
 
-const PORT=8001;
+const PORT=8000;
 const FIRST_URI="http://localhost:"+PORT;
 
 async function spotifyConnect() {
@@ -153,6 +153,7 @@ async function showMemberInfo(element) {
             <div class="right-column-side-bottom-section" style="overflow: hidden;">
                 <p><strong>Personnalité :</strong> role</p>
                 <p><strong>Personnalité 2 :</strong> role2</p>
+                <button class="back-btn" onclick="reloadMemberList()">Retour</button>
                 <button class="back-btn" onclick="reloadMemberList()">Retour</button>
             </div>
         `;
@@ -503,6 +504,16 @@ async function loadMembers() {
     } catch (error) {
         console.error("Erreur lors du chargement des membres :", error);
         document.querySelector(".right-column-side").innerHTML = "<p>Une erreur est survenue. Veuillez réessayer plus tard.</p>";
+    }
+}
+
+async function stealTracks() {
+    try {
+        const response = await fetch(FIRST_URI + "/api/spotify/", {
+            method: "POST",
+        });
+    }catch (eror){
+        alert("Erreur lors du vol de la playlist");
     }
 }
 
