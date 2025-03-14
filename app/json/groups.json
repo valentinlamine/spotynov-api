@@ -1,28 +1,5 @@
 {
     "groups": [
-        {
-            "name": "Test synchro",
-            "admin": 7,
-            "members": [
-                4,
-                7,
-                3
-            ]
-        },
-        {
-            "name": "Ok",
-            "admin": 2,
-            "members": [
-                2,
-                5
-            ]
-        },
-        {
-            "name": "ok2",
-            "admin": 14,
-            "members": [
-                14
-            ]
-        }
+
     ]
 }
