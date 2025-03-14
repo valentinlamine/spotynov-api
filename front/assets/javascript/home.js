@@ -129,7 +129,7 @@ async function showMemberInfo(element) {
     try {
         const memberName = element.textContent.trim();
 
-        /*const response = await fetch('http://localhost:8000/api/groups/member-info', {
+        /*const response = await fetch('http://localhost:8001/api/groups/member-info', {
             method: 'POST',
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
@@ -182,7 +182,7 @@ async function checkAuth() {
     }
 
     try {
-        const response = await fetch('http://localhost:8000/api/auth/verify-token', {
+        const response = await fetch('http://localhost:8001/api/auth/verify-token', {
             method: 'GET',
             headers: { "Authorization": `Bearer ${token}` },
         });
@@ -420,7 +420,7 @@ function formatDuration(seconds) {
 async function loadMembers() {
     try {
         // Récupérer l'admin du groupe
-        const adminResponse = await fetch("http://127.0.0.1:8000/api/groups/get-admin", {
+        const adminResponse = await fetch(FIRST_URI + "/api/groups/get-admin", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
@@ -469,7 +469,7 @@ async function loadMembers() {
             const adminSection = document.querySelector("#adminSection");
             const adminDiv = document.createElement("div");
             adminDiv.classList.add("memberlist");
-            adminDiv.innerHTML = `<span class="member-name" onclick="${await loadTracks(adminResult.admin)}" onclick="loadMembers()">${adminResult.admin}</span>`;
+            adminDiv.innerHTML = `<span class="member-name" onclick="loadTracks(this.innerHTML)" onclick="loadMembers()">${adminResult.admin}</span>`;
             adminSection.appendChild(adminDiv);
 
             // Création des éléments pour chaque membre (hors admin)
@@ -480,7 +480,7 @@ async function loadMembers() {
                     const memberDiv = document.createElement("div");
                     memberDiv.classList.add("memberlist");
                     memberDiv.setAttribute("data-id", member);
-                    memberDiv.innerHTML = `<span class="member-name" onclick="${await loadTracks(adminResult.admin)}" onclick="loadMembers()">${member}</span>`;
+                    memberDiv.innerHTML = `<span class="member-name" onclick="loadTracks(this.innerHTML)" onclick="loadMembers()">${member}</span>`;
                     memberDiv.onclick = function () {
                         showMemberInfo(this);
                     };
@@ -498,7 +498,7 @@ async function loadMembers() {
 
 async function synchronize(){
     try {
-        const response = await fetch('http://localhost:8000/api/spotify/synchronize', {
+        const response = await fetch(FIRST_URI + '/api/spotify/synchronize', {
             method: 'POST',
             headers: { "Authorization": `Bearer ${localStorage.getItem("access_token")}` },
         });

@@ -26,10 +26,8 @@ Créer un fichier `.env` à la racine avec le contenu suivant :
 ```env
 CLIENT_ID=your_spotify_client_id
 CLIENT_SECRET=your_spotify_client_secret
-REDIRECT_URI=http://localhost:8000/callback
+REDIRECT_URI=http://localhost:8000/api/spotify/callback
 SECRET_KEY=your_secret_key
-HOST=0.0.0.0
-PORT=8000
 ```
 
 ### 3. Exécution avec Docker
@@ -37,10 +35,8 @@ PORT=8000
 ```sh
 docker build --build-arg CLIENT_ID="your_client_id" \
              --build-arg CLIENT_SECRET="your_client_secret" \
-             --build-arg REDIRECT_URI="http://localhost:8000/callback" \
+             --build-arg REDIRECT_URI="http://localhost:8000/api/spotify/callback" \
              --build-arg SECRET_KEY="your_secret_key" \
-             --build-arg HOST="0.0.0.0" \
-             --build-arg PORT="8000" \
              -t fastapi-app .
 ```
 

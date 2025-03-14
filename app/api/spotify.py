@@ -105,7 +105,7 @@ async def last_liked_songs(
         raise HTTPException(status_code=401, detail="Not Connected")
 
     # si l'argument n'est pas passé, on prend l'utilisateur du token
-    if target_username.username is "" or None:
+    if target_username.username == "" or target_username.username is None:
         target_username.username = source_username
 
     # vérifier si l'utilisateur existe
