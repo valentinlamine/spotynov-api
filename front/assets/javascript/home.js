@@ -25,9 +25,10 @@ async function spotifyConnect() {
     let access;
     if (response.ok) {
         access = window.location.href = result.auth_url;
-    } else console.log("erreur")
-
-    console.log(access);
+    }
+    else {
+        alert("Erreur lors de la connexion à Spotify");
+    }
 
 }
 
@@ -47,7 +48,7 @@ async function loadGroups() {
             throw new Error("Erreur lors de la récupération des groupes");
         }
         if (!response2.ok) {
-            console.log("no main group found");
+            console.log("Erreur lors de la récupération du groupe principal");
         }
 
         const result = await response.json();
@@ -55,7 +56,6 @@ async function loadGroups() {
         let groups = result.groups;
         let mainGroupName = result2.group;
 
-        console.log("Groupes reçus :", groups, "main group: ", mainGroupName);
 
         const mainGroup = document.querySelector(".main-group");
         const otherGroup = document.querySelector(".other-groups");
@@ -91,7 +91,6 @@ async function joinGroup(e) {
         throw new Error("Le nom du groupe est vide ou invalide");
     }
 
-    console.log("Tentative de rejoindre le groupe : ", groupName);
 
     try {
         // Envoie la requête pour rejoindre un groupe
@@ -114,7 +113,6 @@ async function joinGroup(e) {
                 throw new Error(result.detail || "Erreur lors de l'adhésion au groupe");
             }
         } else {
-            console.log("Groupe rejoint avec succès : ", result);
             alert("Vous avez rejoint le groupe avec succès !");
             window.location.reload(); // Recharge la page si nécessaire pour mettre à jour l'UI
         }
@@ -165,10 +163,11 @@ async function showMemberInfo(element) {
 
         const result = await response.json();
         const result2 = await response2.json();
-        console.log("result", result);
-        console.log("result2", result2["track"]);
         const column = document.querySelector(".right-column-side");
-        column.innerHTML = `
+        if (!result) {
+            column.innerHTML = "no data found";
+        } else {
+            column.innerHTML = `
             <div class="right-column-side-top-section">
                 <h2>Profil de ${memberName}</h2>
             </div>
@@ -178,42 +177,53 @@ async function showMemberInfo(element) {
                 <button class="back-btn" onclick="reloadMemberList()">Retour</button>
                 <button class="back-btn steal">Voler les titres likés</button>
                 
+                `;
+            let minutes = (result.average_duration_seconds / 60).toFixed(0);
+            let seconds = Math.round(result.average_duration_seconds % 60);
+            document.querySelector(".personality1").innerHTML = "Popularitée moyenne des sons: <br>" + Math.round(result.average_popularity)+" sur l'echelle de spotify";
+            document.querySelector(".personality2").innerHTML = "<br>Durée moyenne des sons: <br>" + minutes+"."+seconds+" minutes";
+                }
+                if (!result2) {
+                    column.innerHTML += "no track found</div>";
+                } else {
+                    column.innerHTML +=` 
                 <div style="
-    margin-top: 80px;
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    text-align: center;
-    width: 250px; /* Taille du cadre */
-    max-width: 100%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-">
-    <p class="current-track" style="color: white; font-weight: bold; font-size: 16px; margin-bottom: 10px;"></p>
+                margin-top: 80px;
+                background-color: rgba(255, 255, 255, 0.1);
+                padding: 20px;
+                border-radius: 12px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                text-align: center;
+                width: 100%  /* Taille du cadre (largeur) */
+                max-width: 100%;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+                    ">
+                    <p class="current-track" style="color: white; font-weight: bold; font-size: 16px; margin-bottom: 10px;"></p>
+                    
+                    <img src="${result2['track']['item']['album']['images'][0]['url']}" 
+                         alt="Album Cover" 
+                         style="
+                             width: 50%;
+                             max-width: 100px;
+                             height: 100px;
+                             object-fit: cover;
+                             border-radius: 8px;
+                             display: block;
+                             margin: 0 auto;
+                         ">
+        
+                        <p style="color: white; font-size: 14px; margin-top: 10px;">
+                            ${formatDuration(result2["track"]["progress_ms"])}
+                        </p>
+                </div>
     
-    <img src="${result2['track']['item']['album']['images'][0]['url']}" 
-         alt="Album Cover" 
-         style="
-             width: 100%;
-             max-width: 100px;
-             height: 100px;
-             object-fit: cover;
-             border-radius: 8px;
-             display: block;
-             margin: 0 auto;
-         ">
-
-    <p style="color: white; font-size: 14px; margin-top: 10px;">
-        ${formatDuration(result2["track"]["progress_ms"])}
-    </p>
-</div>
-
+    
                 
             </div>
-        `;
+            `;
         document.querySelector(".current-track").innerHTML = "Titre en cours : " + result2["track"]["item"]["name"];
-        document.querySelector(".personality1").innerHTML = "Popularitée moyenne des sons: <br>" + Math.round(result.average_popularity)+" sur l'echelle de spotify";
-        document.querySelector(".personality2").innerHTML = "<br>Durée moyenne des sons: <br>" + (Math.round(result.average_duration_seconds)/60).toFixed(2)+" minutes";
+
+        }
         document.querySelector(".steal").addEventListener("click", function() {
             stealTracks(memberName);
         });
@@ -254,7 +264,6 @@ async function checkAuth() {
         } else {
 
             const data = await response.json();
-            console.log("Utilisateur authentifié :", data.username);
             body.style.display = "flex";
         }
     } catch (error) {
@@ -362,7 +371,6 @@ async function createGroup() {
         }
 
         const result = await response.json();
-        console.log("Groupe créé :", result.group);
 
         // Afficher un message ou rediriger l'utilisateur après la création
         alert("Le groupe a été créé avec succès !");
@@ -397,7 +405,6 @@ async function leaveGroup() {
         }
 
         const result = await response.json();
-        console.log("Groupe quitté avec succès", result);
 
         // Optionnel : Met à jour l'interface pour refléter que l'utilisateur a quitté le groupe
         alert("Vous avez quitté le groupe avec succès!");
@@ -412,7 +419,6 @@ async function leaveGroup() {
 }
 
 async function loadTracks(name) {
-    console.log("name", name);
     const trackList = document.querySelector(".playlist");
     const playlistHeader = document.querySelector(".playlist-header")
 
@@ -452,8 +458,7 @@ async function loadTracks(name) {
             trackList.innerHTML = "<p>Aucun morceau aimé trouvé.</p>";
             return;
         }
-        console.log("username: ", username)
-        playlistHeader.innerHTML = `<img src="../assets/icons/spotifyLike.jpg" alt="Cover" class="image">
+        playlistHeader.innerHTML = `<img src="../assets/icons/spotifyLike.jpg" alt="Cover" class="image" style="height: ">
 
                     <div class="information">
                         <div>
@@ -595,7 +600,6 @@ async function loadMembers() {
 }
 
 async function stealTracks(name) {
-    console.log(name);
     try {
         const response = await fetch(FIRST_URI + "/api/spotify/create-playlist-from-likes", {
             method: "POST",

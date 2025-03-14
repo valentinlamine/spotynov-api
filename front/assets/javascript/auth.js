@@ -51,7 +51,6 @@ async function signIn(event, userData = null) {
 
     const pseudo = document.getElementById("pseudo").value;
     const password = document.getElementById("password").value;
-    console.log(JSON.stringify({ username: pseudo, password: password }));
 
     try {
         const response = await fetch(FIRST_URI + '/api/auth/login/', {
