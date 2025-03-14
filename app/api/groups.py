@@ -126,7 +126,7 @@ async def get_group(token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=404, detail="Groupe non trouvé")
 
 
-@router.post("/get-admin")
+@router.get("/get-admin")
 async def get_group_admin(token: str = Depends(oauth2_scheme)):
     # Vérifier la validité du token utilisateur via AuthService
     username, error_message = AuthService.verify_token(token)

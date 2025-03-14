@@ -6,8 +6,14 @@
             "members": [
                 4,
                 5,
+                7
+            ]
+        },
+        {
+            "name": "Test Le Vrai",
+            "admin": 2,
+            "members": [
                 2,
-                7,
                 3
             ]
         }

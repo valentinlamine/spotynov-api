@@ -2,11 +2,14 @@ document.addEventListener("DOMContentLoaded", () => {
     checkAuth();  // Vérifie l'authentification
     loadGroups(); // Charge les groupes
     loadTracks(); // Charge les tracks
+    loadMembers();
 
     // Ajoute un event listener au bouton "refresh" si présent
     const refreshBtn = document.querySelector(".refreshbutton");
     if (refreshBtn) refreshBtn.addEventListener("click", spotifyConnect);
 });
+
+let selectedUsername = "";
 
 async function spotifyConnect() {
     if (event) event.preventDefault();
@@ -121,110 +124,46 @@ async function joinGroup(e) {
     }
 }
 
-
-
 async function showMemberInfo(element) {
-    const memberId = element.getAttribute("data-id");
+    try {
+        const memberName = element.textContent.trim();
 
-    const response = await fetch('http://localhost:8000/api/groups/members', {
-        method: 'GET',
-        headers: { "Authorization": `Bearer ${localStorage.getItem("access_token")}` },
-    });
+        const response = await fetch('http://localhost:8000/api/groups/member-info', {
+            method: 'POST',
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ member: memberName })
+        });
 
-    const result = await response.json();
+        const memberInfo = await response.json();
+        if (!response.ok) {
+            throw new Error(memberInfo.detail || "Erreur lors de la récupération des informations du membre");
+        }
 
-    // Simuler des données pour chaque membre
-    const membersData = {
-        1: { name: "Membre 1", role: "Admin", joined: "Janvier 2024" },
-        2: { name: "Membre 2", role: "Modérateur", joined: "Mars 2023" },
-        3: { name: "Membre 3", role: "Utilisateur", joined: "Juin 2022" },
-        4: { name: "Membre 4", role: "VIP", joined: "Décembre 2021" }
-    };
-
-    console.log(membersData)
-
-    // Récupérer les infos du membre sélectionné
-    const memberInfo = membersData[memberId];
-
-    // Sélectionner la colonne et remplacer son contenu
-    const column = document.querySelector(".right-column-side");
-    column.innerHTML = `
-        <div class="right-column-side-top-section">
-            <h2>Profil de ${memberInfo.name}</h2>
-        </div>
-        <div class="right-column-side-bottom-section" style="overflow: hidden;">
-            <p><strong>Rôle :</strong> ${memberInfo.role}</p>
-            <p><strong>Date d'adhésion :</strong> ${memberInfo.joined}</p>
-            <button class="back-btn" onclick="reloadMemberList()">Retour</button>
-        </div>
-    `;
+        const column = document.querySelector(".right-column-side");
+        column.innerHTML = `
+            <div class="right-column-side-top-section">
+                <h2>Profil de ${memberInfo.name}</h2>
+            </div>
+            <div class="right-column-side-bottom-section" style="overflow: hidden;">
+                <p><strong>Rôle :</strong> ${memberInfo.role}</p>
+                <p><strong>Date d'adhésion :</strong> ${memberInfo.joined}</p>
+                <button class="back-btn" onclick="reloadMemberList()">Retour</button>
+            </div>
+        `;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des informations du membre :", error);
+        alert("Impossible de récupérer les informations du membre.");
+    }
 }
 
 async function reloadMemberList() {
     try {
-        const response = await fetch("http://localhost:8000/api/groups/members", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
-            },
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(result.detail || "Erreur lors de la récupération des membres");
-        }
-
-        const membersList = document.querySelector(".right-column-side");
-
-        // Vérifie si la liste des membres existe
-        if (result.members && result.members.length > 0) {
-            // Réinitialise le contenu de la colonne avant d'ajouter les nouveaux éléments
-            membersList.innerHTML = `
-                <div class="right-column-side-top-section">
-                    <h2>Admin du groupe</h2>
-                </div>
-                <div class="right-column-side-bottom-section" id="adminSection">
-                    <!-- Admin sera inséré ici -->
-                </div>
-                <div class="right-column-side-top-section">
-                    <h2>Membre(s) du groupe</h2>
-                </div>
-                <div class="right-column-side-bottom-section" id="membersList">
-                    <!-- Membres seront insérés ici -->
-                </div>
-            `;
-
-            // On suppose que le premier membre dans la liste est l'admin, ajuste cette logique si nécessaire
-            const adminName = result.members[0];  // Remplacer cette logique si nécessaire
-
-            // Insertion de l'admin dans la section "Admin du groupe"
-            const adminSection = document.querySelector("#adminSection");
-            const adminDiv = document.createElement("div");
-            adminDiv.classList.add("memberlist");
-            adminDiv.setAttribute("data-id", 1);  // L'ID est à ajuster selon l'admin réel
-            adminDiv.innerHTML = `<span class="member-name">${adminName}</span>`;
-            adminSection.appendChild(adminDiv);
-
-            // Création des éléments pour chaque membre
-            const membersSection = document.querySelector("#membersList");
-            result.members.forEach((member, index) => {
-                const memberDiv = document.createElement("div");
-                memberDiv.classList.add("memberlist");
-                memberDiv.setAttribute("data-id", index + 2);  // L'ID est ajusté pour les autres membres
-                memberDiv.innerHTML = `<span class="member-name">${member}</span>`;
-                memberDiv.onclick = function () {
-                    showMemberInfo(this);  // Afficher les infos du membre
-                };
-                membersSection.appendChild(memberDiv);
-            });
-        } else {
-            membersList.innerHTML = "<p>Aucun membre trouvé.</p>";
-        }
-
+        await loadMembers();
     } catch (error) {
-        console.error("Erreur lors du chargement des membres :", error);
-        document.querySelector(".right-column-side").innerHTML = "<p>Une erreur est survenue. Veuillez réessayer plus tard.</p>";
+        console.error("Erreur lors du rechargement des membres :", error);
     }
 }
 
@@ -421,7 +360,7 @@ async function loadTracks() {
 
     try {
         // Modifie la méthode en POST, et place les paramètres dans le corps
-        const username = "valouz";  // Remplace par le nom d'utilisateur réel
+        const username = selectedUsername;  // Remplace par le nom d'utilisateur réel
         const limit = 10;  // Nombre de morceaux à récupérer
         const response = await fetch("http://localhost:8000/api/spotify/last-liked-songs", {
             method: "POST",  // Changement de méthode pour POST
@@ -480,24 +419,37 @@ function formatDuration(seconds) {
 
 async function loadMembers() {
     try {
-        const response = await fetch("http://localhost:8000/api/groups/members", {
+        // Récupérer l'admin du groupe
+        const adminResponse = await fetch("http://127.0.0.1:8000/api/groups/get-admin", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+                "Content-Type": "application/json"
+            },
+        });
+
+        const adminResult = await adminResponse.json();
+        if (!adminResponse.ok) {
+            throw new Error(adminResult.detail || "Erreur lors de la récupération de l'admin");
+        }
+
+        // Récupérer la liste des membres
+        const membersResponse = await fetch("http://localhost:8000/api/groups/members", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
             },
         });
 
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(result.detail || "Erreur lors de la récupération des membres");
+        const membersResult = await membersResponse.json();
+        if (!membersResponse.ok) {
+            throw new Error(membersResult.detail || "Erreur lors de la récupération des membres");
         }
 
         const membersList = document.querySelector(".right-column-side");
 
         // Vérifie si la liste des membres existe
-        if (result.members && result.members.length > 0) {
-            // Réinitialise le contenu de la colonne avant d'ajouter les nouveaux éléments
+        if (membersResult.members && membersResult.members.length > 0) {
             membersList.innerHTML = `
                 <div class="right-column-side-top-section">
                     <h2>Admin du groupe</h2>
@@ -513,38 +465,46 @@ async function loadMembers() {
                 </div>
             `;
 
-            // On suppose que le premier membre dans la liste est l'admin, ajuste cette logique si nécessaire
-            const adminName = result.members[0];  // Remplacer cette logique si nécessaire
-
             // Insertion de l'admin dans la section "Admin du groupe"
             const adminSection = document.querySelector("#adminSection");
             const adminDiv = document.createElement("div");
             adminDiv.classList.add("memberlist");
-            adminDiv.setAttribute("data-id", 1);  // L'ID est à ajuster selon l'admin réel
-            adminDiv.innerHTML = `<span class="member-name">${adminName}</span>`;
+            adminDiv.innerHTML = `<span class="member-name">${adminResult.admin}</span>`;
             adminSection.appendChild(adminDiv);
 
-            // Création des éléments pour chaque membre
+            // Création des éléments pour chaque membre (hors admin)
             const membersSection = document.querySelector("#membersList");
-            result.members.forEach((member, index) => {
-                const memberDiv = document.createElement("div");
-                memberDiv.classList.add("memberlist");
-                memberDiv.setAttribute("data-id", index + 2);  // L'ID est ajusté pour les autres membres
-                memberDiv.innerHTML = `<span class="member-name">${member}</span>`;
-                memberDiv.onclick = function () {
-                    showMemberInfo(this);  // Afficher les infos du membre
-                };
-                membersSection.appendChild(memberDiv);
+            membersResult.members.forEach((member, index) => {
+                if (member !== adminResult.admin) { // Exclure l'admin de la liste des membres
+                    const memberDiv = document.createElement("div");
+                    memberDiv.classList.add("memberlist");
+                    memberDiv.setAttribute("data-id", member);
+                    memberDiv.innerHTML = `<span class="member-name">${member}</span>`;
+                    memberDiv.onclick = function () {
+                        showMemberInfo(this);
+                    };
+                    membersSection.appendChild(memberDiv);
+                }
             });
         } else {
             membersList.innerHTML = "<p>Aucun membre trouvé.</p>";
         }
-
     } catch (error) {
         console.error("Erreur lors du chargement des membres :", error);
         document.querySelector(".right-column-side").innerHTML = "<p>Une erreur est survenue. Veuillez réessayer plus tard.</p>";
     }
 }
 
+async function synchronize(){
+    try {
+        const response = await fetch('http://localhost:8000/api/spotify/synchronize', {
+            method: 'POST',
+            headers: { "Authorization": `Bearer ${localStorage.getItem("access_token")}` },
+        });
 
-document.addEventListener("DOMContentLoaded", loadMembers);
+        const result = await response.json();
+    }
+    catch (error) {
+        alert("Vérifiez que vous êtes admin ou pas seul dans le groupe");
+    }
+}

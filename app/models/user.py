@@ -18,7 +18,7 @@ class User(BaseModel):
 
 
 class LikedSongClass(BaseModel):
-    username: str
+    username: str = None
     limit: int = 10
 
 

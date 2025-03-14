@@ -96,25 +96,33 @@ async def current_playback(token: str = Depends(oauth2_scheme)):
 
 @router.post("/last-liked-songs")
 async def last_liked_songs(
-        username: LikedSongClass,
+        target_username: LikedSongClass,
         token: str = Depends(oauth2_scheme)):
     # Vérifier la validité du token utilisateur via AuthService
-    username.username, error_message = AuthService.verify_token(token)
+    source_username, error_message = AuthService.verify_token(token)
 
-    if username.username is None:
+    if source_username is None:
         raise HTTPException(status_code=401, detail=error_message)
+
+    # si l'argument n'est pas passé, on prend l'utilisateur du token
+    if target_username.username is None:
+        target_username.username = source_username
+
+    # vérifier si l'utilisateur existe
+    if AuthService.get_user_id(target_username.username) is None:
+        raise HTTPException(status_code=401, detail="Utilisateur non trouvé")
 
     try:
         # Utiliser le token Spotify pour récupérer les derniers morceaux aimés
-        spotify_token = AuthService.get_spotify_token(username.username)
+        spotify_token = AuthService.get_spotify_token(target_username.username)
         if spotify_token is None:
-            raise HTTPException(status_code=401, detail="Erreur lors de la récupération du token Spotify")
+            raise HTTPException(status_code=401, detail="L'utilisateur n'a pas lié son compte Spotify ou le token a expiré")
 
-        liked_songs = SpotifyService.get_last_liked_songs(spotify_token, username.limit)
+        liked_songs = SpotifyService.get_last_liked_songs(spotify_token, target_username.limit)
 
         # Stocke les morceaux like dans la base de donnée de l'utilisateur
         storage = UserStorage()
-        storage.set_liked_playlist(username.username, liked_songs)
+        storage.set_liked_playlist(target_username.username, liked_songs)
 
         return {"liked_songs": liked_songs}
     except Exception as e:
