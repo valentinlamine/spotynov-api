@@ -145,18 +145,78 @@ async function showMemberInfo(element) {
             throw new Error(memberInfo.detail || "Erreur lors de la récupération des informations du membre");
         }
          */
+        const response = await fetch(FIRST_URI + "/api/spotify/analyze-tracks", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ user: memberName }), // Envoie le nom du groupe dans le corps de la requête
+        });
+
+        const response2 = await fetch(FIRST_URI + "/api/spotify/current-playback", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ user: memberName }), // Envoie le nom du groupe dans le corps de la requête
+        });
+
+        const result = await response.json();
+        const result2 = await response2.json();
+        console.log("result", result);
+        console.log("result2", result2["track"]);
         const column = document.querySelector(".right-column-side");
         column.innerHTML = `
             <div class="right-column-side-top-section">
                 <h2>Profil de ${memberName}</h2>
             </div>
             <div class="right-column-side-bottom-section" style="overflow: hidden;">
-                <p><strong>Personnalité :</strong> role</p>
-                <p><strong>Personnalité 2 :</strong> role2</p>
+                <p><strong class="personality1">Personnalité :</strong></p>
+                <p><strong class="personality2">Personnalité 2 :</strong></p>
                 <button class="back-btn" onclick="reloadMemberList()">Retour</button>
-                <button class="back-btn" onclick="stealTracks(${memberName.toString()})">Voler les titres likés</button>
+                <button class="back-btn steal">Voler les titres likés</button>
+                
+                <div style="
+    margin-top: 80px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    width: 250px; /* Taille du cadre */
+    max-width: 100%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+">
+    <p class="current-track" style="color: white; font-weight: bold; font-size: 16px; margin-bottom: 10px;"></p>
+    
+    <img src="${result2['track']['item']['album']['images'][0]['url']}" 
+         alt="Album Cover" 
+         style="
+             width: 100%;
+             max-width: 100px;
+             height: 100px;
+             object-fit: cover;
+             border-radius: 8px;
+             display: block;
+             margin: 0 auto;
+         ">
+
+    <p style="color: white; font-size: 14px; margin-top: 10px;">
+        ${formatDuration(result2["track"]["progress_ms"])}
+    </p>
+</div>
+
+                
             </div>
         `;
+        document.querySelector(".current-track").innerHTML = "Titre en cours : " + result2["track"]["item"]["name"];
+        document.querySelector(".personality1").innerHTML = "Popularitée moyenne des sons: <br>" + Math.round(result.average_popularity)+" sur l'echelle de spotify";
+        document.querySelector(".personality2").innerHTML = "<br>Durée moyenne des sons: <br>" + (Math.round(result.average_duration_seconds)/60).toFixed(2)+" minutes";
+        document.querySelector(".steal").addEventListener("click", function() {
+            stealTracks(memberName);
+        });
     } catch (error) {
         console.error("Erreur lors de la récupération des informations du membre :", error);
     }
@@ -354,6 +414,7 @@ async function leaveGroup() {
 async function loadTracks(name) {
     console.log("name", name);
     const trackList = document.querySelector(".playlist");
+    const playlistHeader = document.querySelector(".playlist-header")
 
     // Vérifie si le token d'accès est présent dans le localStorage
     const accessToken = localStorage.getItem("access_token");
@@ -391,6 +452,19 @@ async function loadTracks(name) {
             trackList.innerHTML = "<p>Aucun morceau aimé trouvé.</p>";
             return;
         }
+        console.log("username: ", username)
+        playlistHeader.innerHTML = `<img src="../assets/icons/spotifyLike.jpg" alt="Cover" class="image">
+
+                    <div class="information">
+                        <div>
+                            <p class="title">Playlist</p>
+                        </div>
+                        <div>
+                            <p class="playlistname">Titres likés${username ? ` de ${username}` : ""}</p>
+
+                        
+                        </div>
+                    </div>`
 
         trackList.innerHTML = `<div class="track-info header-track">
                             <span class="track-number">#</span>
@@ -466,7 +540,7 @@ async function loadMembers() {
                     <!-- Admin sera inséré ici -->
                 </div>
                 <div class="right-column-side-top-section">
-                    <h2>Membre(s) du groupe</h2>
+                    <h2>Membre(s) du groupe</h2>*
                 </div>
                 <div class="right-column-side-bottom-section" id="membersList">
                     <!-- Membres seront insérés ici -->
@@ -503,7 +577,20 @@ async function loadMembers() {
         }
     } catch (error) {
         console.error("Erreur lors du chargement des membres :", error);
-        document.querySelector(".right-column-side").innerHTML = "<p>Une erreur est survenue. Veuillez réessayer plus tard.</p>";
+        document.querySelector(".right-column-side").innerHTML = `
+  <div style="
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+  ">
+    <p style="color: white; font-weight: bold; font-size: large; margin: 0;">
+      Vous n'avez pas encore de groupe
+    </p>
+  </div>
+`;
+
     }
 }
 
@@ -527,7 +614,7 @@ async function stealTracks(name) {
     }
 }
 
-async function synchronize(){
+async function synchronize() {
     try {
         const response = await fetch(FIRST_URI + '/api/spotify/synchronize', {
             method: 'POST',
@@ -535,8 +622,14 @@ async function synchronize(){
         });
 
         const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Erreur lors de la synchronisation");
+        }
+
+        alert(result.message || "Synchronisation réussie");
     }
     catch (error) {
-        alert("Vérifiez que vous êtes admin ou pas seul dans le groupe");
+        alert(error.message || "Une erreur est survenue");
     }
 }

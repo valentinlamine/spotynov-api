@@ -73,17 +73,22 @@ async def spotify_link(
 
 
 # Endpoint pour récupérer le morceau en cours de lecture pour l'utilisateur
-@router.get("/current-playback")
-async def current_playback(token: str = Depends(oauth2_scheme)):
+@router.post("/current-playback")
+async def current_playback(user: UserNameClass,
+                           token: str = Depends(oauth2_scheme)):
     # Vérifier la validité du token utilisateur via AuthService
     username, error_message = AuthService.verify_token(token)
 
     if username is None:
         raise HTTPException(status_code=401, detail=error_message)
 
+    # vérifier si l'utilisateur existe
+    if AuthService.get_user_id(user.user) is None:
+        raise HTTPException(status_code=401, detail="Utilisateur non trouvé")
+
     try:
         # Utiliser le token Spotify pour récupérer le morceau en cours de lecture
-        spotify_token = AuthService.get_spotify_token(username)
+        spotify_token = AuthService.get_spotify_token(user.user)
         if spotify_token is None:
             raise HTTPException(status_code=401, detail="Erreur lors de la récupération du token Spotify")
 
@@ -129,7 +134,7 @@ async def last_liked_songs(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/analyze-tracks")
+@router.post("/analyze-tracks")
 async def analyze_tracks(
         user: UserNameClass,
         token: str = Depends(oauth2_scheme)):
@@ -234,6 +239,9 @@ async def synchronize_playback(
         # Récupérer les informations de la lecture en cours de l'administrateur
         playback = SpotifyService.get_current_playback(admin_spotify_token)
 
+        if playback is None:
+            return {"success": False, "message": "Aucun morceau en cours de lecture."}
+
         # Synchroniser la musique sur tous les appareils des membres du groupe
         for user_id in group_users_id:
             # récupérer le nom des utilisateurs
@@ -244,9 +252,11 @@ async def synchronize_playback(
             user_spotify_token = AuthService.get_spotify_token(user)
             if user_spotify_token:
                 # Démarrer la lecture sur l'appareil actif du membre à la même position que l'administrateur
-                SpotifyService.start_playback(user_spotify_token, playback['item']['id'], playback['progress_ms'])
+                success, message = SpotifyService.start_playback(user_spotify_token, playback['item']['id'], playback['progress_ms'])
 
-        return {"message": "La musique a été synchronisée sur tous les appareils des membres du groupe."}
+        return {"success": True, "message": "Lecture synchronisée avec succès sur tous les appareils des membres du groupe."}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+

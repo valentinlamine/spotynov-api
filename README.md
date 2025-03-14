@@ -1,4 +1,5 @@
 # Projet FastAPI - Gestion des Groupes
+#### membres: Mattéo VOCANSON, Valentin LAMINE, Flavio NUNES, Mathis GREDT, Dimitri BRANCOURT
 
 ## Description
 Ce projet est une API développée avec **FastAPI** permettant de gérer des groupes et leurs membres. Il inclut des fonctionnalités d'authentification, de gestion des groupes et d'intégration avec Spotify.
@@ -29,6 +30,9 @@ CLIENT_SECRET=your_spotify_client_secret
 REDIRECT_URI=http://localhost:8000/api/spotify/callback
 SECRET_KEY=your_secret_key
 ```
+#### CLIENT_ID et CLIENT_SECRET sont trouvable sur le dashboard spotify developer.
+#### REDIRECT_URI est l'adresse de redirection après l'authentification spotify.
+#### SECRET_KEY est la clé de chiffrage pour les mots de passe.
 
 ### 3. Exécution avec Docker
 #### Build de l'image Docker

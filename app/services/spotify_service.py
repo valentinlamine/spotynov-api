@@ -215,15 +215,15 @@ class SpotifyService:
         # Vérification du statut de la réponse
         if response.status_code == 204:
             # Lecture démarrée avec succès
-            return {"success": True}
+            return True, f"Lecture démarrée"
         elif response.status_code == 401:
-            raise Exception("Non autorisé : Vérifiez votre token Spotify")
+            return False, f"Token d'accès invalide"
         elif response.status_code == 403:
-            raise Exception("Accès refusé : L'API n'a pas permis d'effectuer cette action")
+            return False, f"Lecture impossible"
         elif response.status_code == 429:
-            raise Exception("Trop de requêtes envoyées. Veuillez réessayer plus tard.")
+            return False, f"Trop de requêtes"
         else:
-            raise Exception(f"Erreur {response.status_code} : {response.text}")
+            return False, f"Erreur inconnue"
 
 
 
