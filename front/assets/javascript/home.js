@@ -391,6 +391,13 @@ async function loadTracks(name) {
             return;
         }
 
+        trackList.innerHTML = `<div class="track-info header-track">
+                            <span class="track-number">#</span>
+                            <span class="track-img-placeholder"></span> <!-- Espace vide pour aligner -->
+                            <span class="track-name">Titre</span>
+                            <img src="../assets/icons/Timer.svg" alt="Options" class="track-options-icon">
+                        </div>
+                        <span class="separator"></span>`
         // Parcours les morceaux et les ajoute dynamiquement à la playlist
         likedSongs.forEach((song, index) => {
             // Ajoute chaque chanson à la playlist
@@ -469,8 +476,11 @@ async function loadMembers() {
             const adminSection = document.querySelector("#adminSection");
             const adminDiv = document.createElement("div");
             adminDiv.classList.add("memberlist");
-            adminDiv.innerHTML = `<span class="member-name" onclick="loadTracks(this.innerHTML)" onclick="loadMembers()">${adminResult.admin}</span>`;
+            adminDiv.innerHTML = `<span class="member-name" onclick="loadTracks(this.innerHTML)">${adminResult.admin}</span>`;
             adminSection.appendChild(adminDiv);
+            adminSection.onclick = function () {
+                showMemberInfo(this);
+            };
 
             // Création des éléments pour chaque membre (hors admin)
             const membersSection = document.querySelector("#membersList");
@@ -480,7 +490,7 @@ async function loadMembers() {
                     const memberDiv = document.createElement("div");
                     memberDiv.classList.add("memberlist");
                     memberDiv.setAttribute("data-id", member);
-                    memberDiv.innerHTML = `<span class="member-name" onclick="loadTracks(this.innerHTML)" onclick="loadMembers()">${member}</span>`;
+                    memberDiv.innerHTML = `<span class="member-name" onclick="loadTracks(this.innerHTML)">${member}</span>`;
                     memberDiv.onclick = function () {
                         showMemberInfo(this);
                     };
