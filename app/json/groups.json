@@ -2,19 +2,19 @@
     "groups": [
         {
             "name": "Test synchro",
-            "admin": 5,
+            "admin": 7,
             "members": [
                 4,
-                5,
                 7
             ]
         },
         {
             "name": "Test Le Vrai",
-            "admin": 2,
+            "admin": 3,
             "members": [
+                3,
                 2,
-                3
+                5
             ]
         }
     ]

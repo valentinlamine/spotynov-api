@@ -24,6 +24,9 @@ class AuthService:
     def create_user(user: SimplifiedUser):
         storage = UserStorage()
 
+        if not user.username or not user.password:
+            return False, "Nom d'utilisateur et mot de passe requis"
+
         # Hachage du mot de passe
         hashed_password = pwd_context.hash(user.password)
 

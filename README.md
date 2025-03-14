@@ -17,8 +17,8 @@ Ce projet est une API développée avec **FastAPI** permettant de gérer des gro
 ## Installation
 ### 1. Cloner le dépôt
 ```sh
-git clone https://github.com/votre-repo.git
-cd votre-repo
+git clone https://github.com/valentinlamine/spotynov-api
+cd spotynov-api
 ```
 
 ### 2. Configuration des variables d'environnement

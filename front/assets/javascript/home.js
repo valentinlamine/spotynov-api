@@ -9,10 +9,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (refreshBtn) refreshBtn.addEventListener("click", spotifyConnect);
 });
 
+const PORT=8001;
+const FIRST_URI="http://localhost:"+PORT;
+
 async function spotifyConnect() {
     if (event) event.preventDefault();
 
-    const response = await fetch("http://localhost:8000/api/spotify/connect/", {
+    const response = await fetch(FIRST_URI + "/api/spotify/connect/", {
         method: "GET",
         headers: { "Authorization": `Bearer ${localStorage.getItem("access_token")}` },
     });
@@ -30,12 +33,12 @@ async function spotifyConnect() {
 
 async function loadGroups() {
     try {
-        const response = await fetch("http://localhost:8000/api/groups/list", {
+        const response = await fetch(FIRST_URI + "/api/groups/list", {
             method: "GET",
             headers: { "Authorization": `Bearer ${localStorage.getItem("access_token")}` },
         });
 
-        const response2 = await fetch("http://localhost:8000/api/groups/get-group", {
+        const response2 = await fetch(FIRST_URI + "/api/groups/get-group", {
             method: "POST",
             headers: { "Authorization": `Bearer ${localStorage.getItem("access_token")}` },
         });
@@ -92,7 +95,7 @@ async function joinGroup(e) {
 
     try {
         // Envoie la requête pour rejoindre un groupe
-        const response = await fetch("http://localhost:8000/api/groups/join", {
+        const response = await fetch(FIRST_URI + "/api/groups/join", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
@@ -174,7 +177,7 @@ async function checkAuth() {
     if (!token) {
         console.warn("Aucun token trouvé, redirection vers la page de connexion...");
         body.style.display = "none";
-        window.location.href = "http://localhost:8000/login";  // Redirection vers la page de connexion
+        window.location.href = FIRST_URI + "/login";  // Redirection vers la page de connexion
         return;
     }
 
@@ -196,7 +199,7 @@ async function checkAuth() {
     } catch (error) {
         console.error("Erreur d'authentification :", error.message);
         localStorage.removeItem("access_token");  // Supprime le token invalide
-        window.location.href = "http://localhost:8000/login";  // Redirection vers la connexion
+        window.location.href = FIRST_URI + "/login";  // Redirection vers la connexion
     }
 }
 
@@ -220,7 +223,7 @@ function logout() {
     // Redirige ou effectue une action de déconnexion
     localStorage.removeItem("access_token");
 
-    window.location.href = "http://localhost:8000/login";
+    window.location.href = FIRST_URI + "/login";
 }
 
 // Fonction qui s'active lors du redimensionnement de l'écran
@@ -284,7 +287,7 @@ async function createGroup() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/groups/create", {
+        const response = await fetch(FIRST_URI + "/api/groups/create", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -319,7 +322,7 @@ async function leaveGroup() {
     }
 
     try {
-        const response = await fetch("http://localhost:8000/api/groups/leave", {
+        const response = await fetch(FIRST_URI + "/api/groups/leave", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -348,6 +351,7 @@ async function leaveGroup() {
 }
 
 async function loadTracks(name) {
+    console.log("name", name);
     const trackList = document.querySelector(".playlist");
 
     // Vérifie si le token d'accès est présent dans le localStorage
@@ -359,9 +363,9 @@ async function loadTracks(name) {
 
     try {
         // Modifie la méthode en POST, et place les paramètres dans le corps
-        const username = "";  // Remplace par le nom d'utilisateur réel
+        const username = name;  // Remplace par le nom d'utilisateur réel
         const limit = 10;  // Nombre de morceaux à récupérer
-        const response = await fetch("http://localhost:8000/api/spotify/last-liked-songs", {
+        const response = await fetch(FIRST_URI + "/api/spotify/last-liked-songs", {
             method: "POST",  // Changement de méthode pour POST
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -389,8 +393,6 @@ async function loadTracks(name) {
 
         // Parcours les morceaux et les ajoute dynamiquement à la playlist
         likedSongs.forEach((song, index) => {
-            console.log(song);  // Affiche chaque chanson pour déboguer
-            console.log(song["track"]["album"]["images"][0]["url"])
             // Ajoute chaque chanson à la playlist
             trackList.innerHTML += `
                 <div class="track">
@@ -432,7 +434,7 @@ async function loadMembers() {
         }
 
         // Récupérer la liste des membres
-        const membersResponse = await fetch("http://localhost:8000/api/groups/members", {
+        const membersResponse = await fetch(FIRST_URI + "/api/groups/members", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
@@ -467,23 +469,24 @@ async function loadMembers() {
             const adminSection = document.querySelector("#adminSection");
             const adminDiv = document.createElement("div");
             adminDiv.classList.add("memberlist");
-            adminDiv.innerHTML = `<span class="member-name">${adminResult.admin}</span>`;
+            adminDiv.innerHTML = `<span class="member-name" onclick="${await loadTracks(adminResult.admin)}" onclick="loadMembers()">${adminResult.admin}</span>`;
             adminSection.appendChild(adminDiv);
 
             // Création des éléments pour chaque membre (hors admin)
             const membersSection = document.querySelector("#membersList");
-            membersResult.members.forEach((member, index) => {
+            for (const member of membersResult.members) {
+                const index = membersResult.members.indexOf(member);
                 if (member !== adminResult.admin) { // Exclure l'admin de la liste des membres
                     const memberDiv = document.createElement("div");
                     memberDiv.classList.add("memberlist");
                     memberDiv.setAttribute("data-id", member);
-                    memberDiv.innerHTML = `<span class="member-name">${member}</span>`;
+                    memberDiv.innerHTML = `<span class="member-name" onclick="${await loadTracks(adminResult.admin)}" onclick="loadMembers()">${member}</span>`;
                     memberDiv.onclick = function () {
                         showMemberInfo(this);
                     };
                     membersSection.appendChild(memberDiv);
                 }
-            });
+            }
         } else {
             membersList.innerHTML = "<p>Aucun membre trouvé.</p>";
         }
