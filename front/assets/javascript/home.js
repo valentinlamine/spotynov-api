@@ -1,15 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
     checkAuth();  // Vérifie l'authentification
     loadGroups(); // Charge les groupes
-    loadTracks(); // Charge les tracks
+    loadTracks(""); // Charge les tracks
     loadMembers();
 
     // Ajoute un event listener au bouton "refresh" si présent
     const refreshBtn = document.querySelector(".refreshbutton");
     if (refreshBtn) refreshBtn.addEventListener("click", spotifyConnect);
 });
-
-let selectedUsername = "";
 
 async function spotifyConnect() {
     if (event) event.preventDefault();
@@ -128,7 +126,7 @@ async function showMemberInfo(element) {
     try {
         const memberName = element.textContent.trim();
 
-        const response = await fetch('http://localhost:8000/api/groups/member-info', {
+        /*const response = await fetch('http://localhost:8000/api/groups/member-info', {
             method: 'POST',
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
@@ -137,25 +135,26 @@ async function showMemberInfo(element) {
             body: JSON.stringify({ member: memberName })
         });
 
+
+
         const memberInfo = await response.json();
         if (!response.ok) {
             throw new Error(memberInfo.detail || "Erreur lors de la récupération des informations du membre");
         }
-
+         */
         const column = document.querySelector(".right-column-side");
         column.innerHTML = `
             <div class="right-column-side-top-section">
-                <h2>Profil de ${memberInfo.name}</h2>
+                <h2>Profil de ${memberName}</h2>
             </div>
             <div class="right-column-side-bottom-section" style="overflow: hidden;">
-                <p><strong>Rôle :</strong> ${memberInfo.role}</p>
-                <p><strong>Date d'adhésion :</strong> ${memberInfo.joined}</p>
+                <p><strong>Personnalité :</strong> role</p>
+                <p><strong>Personnalité 2 :</strong> role2</p>
                 <button class="back-btn" onclick="reloadMemberList()">Retour</button>
             </div>
         `;
     } catch (error) {
         console.error("Erreur lors de la récupération des informations du membre :", error);
-        alert("Impossible de récupérer les informations du membre.");
     }
 }
 
@@ -348,7 +347,7 @@ async function leaveGroup() {
     }
 }
 
-async function loadTracks() {
+async function loadTracks(name) {
     const trackList = document.querySelector(".playlist");
 
     // Vérifie si le token d'accès est présent dans le localStorage
@@ -360,7 +359,7 @@ async function loadTracks() {
 
     try {
         // Modifie la méthode en POST, et place les paramètres dans le corps
-        const username = selectedUsername;  // Remplace par le nom d'utilisateur réel
+        const username = "";  // Remplace par le nom d'utilisateur réel
         const limit = 10;  // Nombre de morceaux à récupérer
         const response = await fetch("http://localhost:8000/api/spotify/last-liked-songs", {
             method: "POST",  // Changement de méthode pour POST
@@ -405,7 +404,6 @@ async function loadTracks() {
 
     } catch (error) {
         console.error("Erreur : ", error.message);
-        alert("Une erreur est survenue, veuillez réessayer.");
     }
 }
 

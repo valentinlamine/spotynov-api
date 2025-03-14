@@ -4,7 +4,7 @@
             "id": 2,
             "username": "aze",
             "password": "$2b$12$xGLIfsQEascC0XJJfC2isuZQto9HH/j/ei9/nuZCopWbCxnwRhiMS",
-            "spotifyToken": "BQC5G1BndQiGEKXxiwwHJMoKbt3t6Y8hB96PEJiZc0VEIqIfnzO-4vx-x5xYPgKFOHHkh1ir_rl1qb4VUD3VuN_IO91EV097jUf0jO8xYt8EtSvBdacEb6LNX7LKoCQSmllwqTq0zGpjRs25CRmjbFbn8AGvEmzZGR-d_qybdNe2ouXyC2CKyBBd9bE6ugaHc33fT745wPSEULm-EKZS97DflDiDm6SElLmN8M8HHXy4Sy0O3hmKzis-gqTTmIRW_9iOAJ_qifrIdS7weeyhQrgbGJIllOKNOOLnjyl2UyzHcXlW7oR9E8TyXdU5DOVPRZrFFXQ5EesVJBp-cICLWNKFWa1jOXJQ4Ks",
+            "spotifyToken": "BQArfAZckxtaHD0uPda620bFVivZjCO5Vzxwr1g8uM5qOrgiwb41CvPwL5TyT607zyjP13401LKAzWPVARF0VEHSqX5I6_R6nCjwpIEc_i22-w793mYSPD_19T_ekAs7AHTKQSXj2EZeEWnIPQKpAHJdI1FPBU70tzaiIG-pmzpUbo-qWUL0LBey6J0m5Mjoj7tyZhKAT-iLOXT0pnlperCrgpk__HbMEwxjKtqCrUsqKrTA119yZrNWe424L5V_pA1HolnneAokTwqPsloTkFJGHoAZUQgeI0ABF-4ThREsgiqC4gJQg04uOnBgUs8zFOCzZnX3BIiLDMfWpKmny_YzWwCtIWIuCoc",
             "likedPlaylist": [
                 {
                     "added_at": "2025-02-25T17:36:20Z",
@@ -4552,7 +4552,7 @@
             "id": 3,
             "username": "valouz",
             "password": "$2b$12$6GV1wGMLQHao0xCf47nae.g/NA1.PNMEpkdrvOtNInOZuH8H/dXCa",
-            "spotifyToken": "BQBNl7o8pDH6mnN84PiP8F7-hseyk46RXhVB8R-CRrhfcpjGpT76N_uNQvWHn_ax732HJPPKQodqSktyUHfGq-Z8LnPO-XbW_IgdzCt_vhqGWSYnus205vIU06070Xpa4wrlPItRM6zZiEsUjdso0WW1HrKRTAhn4q0u5jtV7AkR-G6gTB09PiDxfNx71kTHXs3iXj5S31q0--69M17eNFJepoJjWrolmPwcqIv3-mLunFMqcxGNf52YqIaDKfgrGATwQvaKeazjRg1BtiEP-CX28vVemZ92plI9sIxQMPqv8txkl7xc_7eluFZOoTjjxNZ-FH2tvHLBUQtxjDqJQtS6DkD1K5E",
+            "spotifyToken": "BQBgyhQrznbkhZepeYxEseRjjgDyN-3_8w5RQVV9P2WBFjUyAiOFytF0IMpLb3SbEmvp2VB55XfmEIo-3P5tx3Q-MAI35JrBZnkBBa2F-0bc5_w16DGsmRMxR1deRix2JMRD7XUai_tqaCXue-onDb3yQGIo43WJON5GyL24bOZDjKTD0SGKGNN7Qud3E4lIo9yOgyuiya53QntFfs4CRk8cH6HQAcvjlDq2DDbWR8iD-2I5wBeoYcYYmoVm1EHOl6dmXN9onHsUFqwHrEUM6HXi3aLzcFyPhsj4UUTE07g_wJE9VrRQInZB2tH_nvVmswuVr_Ckvz6M0MPZ0AwX56qTBK-vXBA",
             "likedPlaylist": [
                 {
                     "added_at": "2025-03-13T17:59:05Z",
@@ -10340,7 +10340,28 @@
                     }
                 }
             ]
+        },
+        {
+            "id": 8,
+            "username": "suce",
+            "password": "$2b$12$si80cuYn4kBuiU2g8yemBO1PHSY3JnNUPuSCeY9boSQN7IZxxepfq",
+            "spotifyToken": "BQAWOj47L4sb-SFD9wjH3rwgkOn_mZUcpSEKSOMv4kCyps0dywxh7iHVSuVfXwh3CaJ3QkMgU7vH_tjiv_3kcSsm5loyvkpXt7JWCU9P_99wLRoIvT7OQWOPUSwCuAXy_0Mr8VGxqFpXrelzEuSJaT79dac06jKlclZNlnZlbp2yE9nbD__fj7v4AtpThL5_-4t5-l7PFexAYzFF5TnKM2mKLnkeu_DvIOcBUxYHkK1annCh1Zd6tiu7Feai5F9VKBKY37kIod2rL7zpp_Ppw13PF9awyB51ulHPNjGLP7kPZ2ahd8wFCo0UsGBlA3osh_HBDMvmhPlYXOj7hrg4MsK9ymF0brI",
+            "likedPlaylist": []
+        },
+        {
+            "id": 9,
+            "username": "azert",
+            "password": "$2b$12$cKYGn2dduMCZby6RQDDLGOCgkselw9gqsDbGNcEiMnmf7bICnBtcu",
+            "spotifyToken": null,
+            "likedPlaylist": []
+        },
+        {
+            "id": 10,
+            "username": "",
+            "password": "$2b$12$ACRPzV2osWV/tFEwrJ2zL.MpEQ43Oa.rHFdF5pk40UP46qgnAgoEG",
+            "spotifyToken": null,
+            "likedPlaylist": []
         }
     ],
-    "lastUserId": 7
+    "lastUserId": 10
 }

@@ -102,10 +102,11 @@ async def last_liked_songs(
     source_username, error_message = AuthService.verify_token(token)
 
     if source_username is None:
-        raise HTTPException(status_code=401, detail=error_message)
+        raise HTTPException(status_code=401, detail="Not Connected")
 
     # si l'argument n'est pas passé, on prend l'utilisateur du token
     if target_username.username is None:
+        print(source_username)
         target_username.username = source_username
 
     # vérifier si l'utilisateur existe
