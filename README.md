@@ -42,7 +42,7 @@ docker run --env-file .env -p 8000:8000 fastapi-app
 ```
 
 ### 4. Accéder à l'API
-L'API est accessible sur :
+Le swagger de l'API est accessible à l'adresse suivante :
 ```
 http://localhost:8000/docs
 ```
@@ -62,9 +62,4 @@ pip install -r requirements.txt
 python run.py
 ```
 
-## Contribuer
-Les contributions sont les bienvenues ! Merci de créer une *issue* ou une *pull request*.
-
-## Licence
-Ce projet est sous licence MIT.
 

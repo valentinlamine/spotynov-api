@@ -154,7 +154,7 @@ async function showMemberInfo(element) {
                 <p><strong>Personnalité :</strong> role</p>
                 <p><strong>Personnalité 2 :</strong> role2</p>
                 <button class="back-btn" onclick="reloadMemberList()">Retour</button>
-                <button class="back-btn" onclick="${await stealTracks(memberName)}">Voler les titres likés</button>
+                <button class="back-btn" onclick="stealTracks(${memberName.toString()})">Voler les titres likés</button>
             </div>
         `;
     } catch (error) {

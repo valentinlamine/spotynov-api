@@ -65,10 +65,18 @@
         justify-content: flex-start;
         align-items: center;
         height: 10%;
+        font-size: 1rem;
     }
 
     .refreshbutton-responsive {
         display: block !important;
+        margin: 0px;
+        font-size: 0.7rem;
+
+    }
+
+    .button {
+        font-size: 0.7rem;
     }
 
 }

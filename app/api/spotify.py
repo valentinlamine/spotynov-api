@@ -156,7 +156,7 @@ async def analyze_tracks(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/create-playlist-from-likes")
+@router.post("/create-playlist-from-likes")
 async def create_playlist_from_likes(
         user: UserNameClass,  # Utilisateur cible pour récupérer les morceaux likés
         token: str = Depends(oauth2_scheme)):
