@@ -154,7 +154,7 @@ async function showMemberInfo(element) {
                 <p><strong>Personnalité :</strong> role</p>
                 <p><strong>Personnalité 2 :</strong> role2</p>
                 <button class="back-btn" onclick="reloadMemberList()">Retour</button>
-                <button class="back-btn" onclick="reloadMemberList()">Retour</button>
+                <button class="back-btn" onclick="${await stealTracks(memberName)}">Voler les titres likés</button>
             </div>
         `;
     } catch (error) {
@@ -183,7 +183,7 @@ async function checkAuth() {
     }
 
     try {
-        const response = await fetch('http://localhost:8001/api/auth/verify-token', {
+        const response = await fetch(FIRST_URI + '/api/auth/verify-token', {
             method: 'GET',
             headers: { "Authorization": `Bearer ${token}` },
         });
@@ -507,12 +507,22 @@ async function loadMembers() {
     }
 }
 
-async function stealTracks() {
+async function stealTracks(name) {
+    console.log(name);
     try {
-        const response = await fetch(FIRST_URI + "/api/spotify/", {
+        const response = await fetch(FIRST_URI + "/api/spotify/create-playlist-from-likes", {
             method: "POST",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                user: name,
+            })
         });
-    }catch (eror){
+
+        const result = await response.json();
+    }catch (error){
         alert("Erreur lors du vol de la playlist");
     }
 }

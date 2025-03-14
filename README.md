@@ -33,11 +33,7 @@ SECRET_KEY=your_secret_key
 ### 3. Exécution avec Docker
 #### Build de l'image Docker
 ```sh
-docker build --build-arg CLIENT_ID="your_client_id" \
-             --build-arg CLIENT_SECRET="your_client_secret" \
-             --build-arg REDIRECT_URI="http://localhost:8000/api/spotify/callback" \
-             --build-arg SECRET_KEY="your_secret_key" \
-             -t fastapi-app .
+docker build -t fastapi-app .
 ```
 
 #### Lancer le conteneur
@@ -61,14 +57,9 @@ Une interface utilisateur simple permet d'afficher la liste des membres et leurs
 pip install -r requirements.txt
 ```
 
-#### Lancer l'API
+#### Lancer l'application
 ```sh
-uvicorn run:app --host 0.0.0.0 --port 8000
-```
-
-### Tests
-```sh
-pytest tests/
+python run.py
 ```
 
 ## Contribuer

@@ -9,12 +9,13 @@
             ]
         },
         {
-            "name": "Test Le Vrai",
-            "admin": 3,
+            "name": "test",
+            "admin": 2,
             "members": [
-                3,
                 2,
-                5
+                12,
+                5,
+                3
             ]
         }
     ]
