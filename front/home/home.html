@@ -12,51 +12,29 @@
 <body>
     <div class=" container homeBody">
         <header>
-            <button class="refresbutton">
+            <button class="refreshbutton">
                 Spotify Refresh
             </button>
-            <div class="logout-container">
+            <div class="logout-container" onclick="logout()">
                 <img src="../assets/icons/Deconnexion.svg" alt="Se déconnecter" class="logout-icon" height="25" width="25">
-                <span class="logout-text">Log Out</span>
+                <span class="logout-text">Se déconnecter</span>
             </div>
         </header>
         <div class="content">
             <div class="left-column-side column" id="left-column-side">
                 <div class="column-side-top-section">
+                    <h2>Créer un groupe</h2>
+                    <input class="creategroup"type="text" id="groupName" placeholder="Nom du groupe">
+                </div>
+                <div class="column-side-top-section">
                     <h2>Mon Groupe</h2>
-                    <div class="track">
-                        <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
-                        <span class="track-name">Nom du groupe</span>
-                    </div>
+                    <div class="main-group">
 
+                    </div>
                 </div>
                 <span class="column-side-separator"></span>
-                <div class="column-side-bottom-section">
+                <div class="column-side-bottom-section other-groups">
                     <h2>Autres Groupes</h2>
-                    <div class="track">
-                        <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
-                        <a class="track-name">Nom du groupe</a>
-                    </div>
-                    <div class="track">
-                        <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
-                        <a class="track-name">Nom du groupe</a>
-                    </div>
-                    <div class="track">
-                        <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
-                        <a class="track-name">Nom du groupe</a>
-                    </div>
-                    <div class="track">
-                        <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
-                        <a class="track-name">Nom du groupe</a>
-                    </div>
-                    <div class="track">
-                        <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
-                        <a class="track-name">Nom du groupe</a>
-                    </div>
-                    <div class="track">
-                        <img src="../assets/icons/Chats.svg" alt="Cover" class="track-img">
-                        <a class="track-name">Nom du groupe</a>
-                    </div>
                 </div>
             </div>
             <div class="column-middle column" id="column-middle">
@@ -70,9 +48,6 @@
                         <div>
                             <p class="playlistname">NOM DE LA PLAYLIST</p>
                         </div>
-                        <div>
-                            <p class="admin"><strong>ADMINISTRATOR</strong> : Riot Game</p>
-                        </div>
                     </div>
                 </div>
                 <div class="middle-section middle-bar">
@@ -80,7 +55,7 @@
                         <img src="../assets/icons/ArrowsClockwise.png" alt="Synchroniser" class="icon">
                         Synchroniser
                     </button>
-                    <button class="refresbutton-responsive">
+                    <button class="refreshbutton-responsive">
                         Spotify Refresh
                     </button>
                 </div>
@@ -96,28 +71,21 @@
                         <span class="separator"></span>
 
                         <!-- Lignes de musique normales -->
-                        <div class="track">
-                            <span class="track-number">1</span>
-                            <img src="../assets/background/rectangle-1.png" alt="Cover" class="track-img">
-                            <span class="track-name">Nom de la musique 1</span>
-                            <span class="track-time">3:45</span>
-                        </div>
-                        <div class="track">
-                            <span class="track-number">2</span>
-                            <img src="../assets/background/rectangle-1.png" alt="Cover" class="track-img">
-                            <span class="track-name">Nom de la musique 2</span>
-                            <span class="track-time">4:10</span>
-                        </div>
-                        <div class="track">
-                            <span class="track-number">3</span>
-                            <img src="../assets/background/rectangle-1.png" alt="Cover" class="track-img">
-                            <span class="track-name">Nom de la musique 3</span>
-                            <span class="track-time">2:58</span>
-                        </div>
+
+
                     </div>
                 </div>
             </div>
+
             <div class="right-column-side column" id="right-column-side">
+                <div class="right-column-side-top-section">
+                    <h2>Admin du groupe</h2>
+                </div>
+                <div class="right-column-side-bottom-section" id="GroupAdmin">
+                    <div class="memberlist" data-id="1" onclick="showMemberInfo(this)">
+                        <span class="member-name">Membre 1</span>
+                    </div>
+                </div>
                 <div class="right-column-side-top-section">
                     <h2>Membre(s) du groupe</h2>
                 </div>
@@ -134,6 +102,7 @@
                     <div class="memberlist" data-id="4" onclick="showMemberInfo(this)">
                         <span class="member-name">Membre 4</span>
                     </div>
+
                 </div>
             </div>
             <div class="mobile-nav">

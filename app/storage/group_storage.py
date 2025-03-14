@@ -119,3 +119,9 @@ class GroupStorage:
                 self.save_data()
                 return True
         return False
+
+    def get_group_admin(self, user_id):
+        for group in self.data["groups"]:
+            if user_id in group["members"]:
+                return group["admin"]
+        return None

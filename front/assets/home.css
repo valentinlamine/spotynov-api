@@ -61,7 +61,7 @@ header {
 }
 .column-middle {
     flex: 1;
-    padding: 1rem;
+    padding: 2rem;
     background: rgba(9, 21, 30, 0.8);
     margin: 0 0.5rem;
     max-width: 60%;
@@ -160,7 +160,7 @@ header {
     transition: transform 0.3s ease, background 0.3s ease; /* Transition sur l'échelle et la couleur */
 }
 
-.button:hover, .refresbutton:hover {
+.button:hover, .refreshbutton:hover {
     transform: scale(1.05); /* Augmente légèrement la taille du bouton */
     background: #17b899; /* Changement de couleur de fond au survol */
 }
@@ -170,7 +170,7 @@ header {
     transition: transform 0.5s ease;
 }
 
-.refresbutton {
+.refreshbutton {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -188,7 +188,7 @@ header {
     transition: transform 0.3s ease, background 0.3s ease; /* Transition sur l'échelle et la couleur */
 }
 
-.refresbutton-responsive {
+.refreshbutton-responsive {
     display: none;
     gap: 10px;
     background: #1ED7BE;
@@ -218,7 +218,7 @@ header {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    overflow-y: auto; /* Permet le scroll si la liste est longue */
+    max-height: 400px;
 }
 
 /* Style général des lignes */
@@ -328,6 +328,19 @@ header {
     font-weight: bold;
 }
 
+.creategroup {
+    font-weight: 300;
+    color: #ecfefe;
+    width: 100%;
+    padding: 12px;
+    margin: 5px;
+    background: #202c34;
+    border: 1px solid #3f4d54;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    outline: none;
+}
+
 .column-side-bottom-section {
     min-height: 85%;
     width: 100%;
@@ -371,6 +384,7 @@ header {
     margin: 0 0.5rem;
     border-radius: 30px;
     height: 95%;
+    max-height: 95%;
     display: flex;
     flex-direction: column;
 }
@@ -378,7 +392,6 @@ header {
 
 
 .right-column-side-bottom-section {
-    min-height: 85%;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -419,7 +432,6 @@ header {
     color: white;
     margin: 15px;
     cursor: pointer;
-    padding: 10px;
     text-align: center;
     border-radius: 10px;
     transition: background 0.3s ease;
@@ -430,7 +442,7 @@ header {
 }
 
 .back-btn {
-    margin-top: 20px;
+    margin-top: 10px;
     padding: 10px 20px;
     background: #1ed7be;
     color: #09151e;

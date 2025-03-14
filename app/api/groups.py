@@ -107,3 +107,38 @@ async def join_group(
         return {"message": message}
     else:
         raise HTTPException(status_code=400, detail=message)
+
+
+@router.post("/get-group")
+async def get_group(token: str = Depends(oauth2_scheme)):
+    # Vérifier la validité du token utilisateur via AuthService
+    username, error_message = AuthService.verify_token(token)
+
+    if username is None:
+        raise HTTPException(status_code=401, detail=error_message)
+
+    user_id = AuthService.get_user_id(username)
+
+    group_name = GroupService.get_user_group_name(user_id)
+    if group_name:
+        return {"group": group_name}
+    else:
+        raise HTTPException(status_code=404, detail="Groupe non trouvé")
+
+
+@router.post("/get-admin")
+async def get_group_admin(token: str = Depends(oauth2_scheme)):
+    # Vérifier la validité du token utilisateur via AuthService
+    username, error_message = AuthService.verify_token(token)
+
+    if username is None:
+        raise HTTPException(status_code=401, detail=error_message)
+
+    user_id = AuthService.get_user_id(username)
+
+    admin_id = GroupService.get_group_admin(user_id)
+    if admin_id:
+        admin = AuthService.get_username_by_id(admin_id)
+        return {"admin": admin}
+    else:
+        raise HTTPException(status_code=404, detail="Groupe non trouvé")

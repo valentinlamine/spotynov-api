@@ -94,8 +94,8 @@ async def current_playback(token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/get-last-liked-songs")
-async def get_last_liked_songs(
+@router.post("/last-liked-songs")
+async def last_liked_songs(
         username: LikedSongClass,
         token: str = Depends(oauth2_scheme)):
     # Vérifier la validité du token utilisateur via AuthService
